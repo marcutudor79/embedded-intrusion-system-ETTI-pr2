@@ -1,5 +1,5 @@
 
-;CodeVisionAVR C Compiler V3.51 Evaluation
+;CodeVisionAVR C Compiler V3.51 
 ;(C) Copyright 1998-2023 Pavel Haiduc, HP InfoTech S.R.L.
 ;http://www.hpinfotech.ro
 
@@ -1523,216 +1523,230 @@ __CLEAR_SRAM:
 	.SET power_ctrl_reg=smcr
 	#endif
 ;void main(void)
-; 0000 001E {
+; 0000 001F {
 
 	.CSEG
 _main:
 ; .FSTART _main
-; 0000 001F // Declare your local variables here
-; 0000 0020 
-; 0000 0021 // Crystal Oscillator division factor: 1
-; 0000 0022 #pragma optsize-
-; 0000 0023 CLKPR=(1<<CLKPCE);
+; 0000 0020 // Declare your local variables here
+; 0000 0021 
+; 0000 0022 // Crystal Oscillator division factor: 1
+; 0000 0023 #pragma optsize-
+; 0000 0024 CLKPR=(1<<CLKPCE);
 	LDI  R30,LOW(128)
 	STS  97,R30
-; 0000 0024 CLKPR=(0<<CLKPCE) | (0<<CLKPS3) | (0<<CLKPS2) | (0<<CLKPS1) | (0<<CLKPS0);
+; 0000 0025 CLKPR=(0<<CLKPCE) | (0<<CLKPS3) | (0<<CLKPS2) | (0<<CLKPS1) | (0<<CLKPS0);
 	LDI  R30,LOW(0)
 	STS  97,R30
-; 0000 0025 #ifdef _OPTIMIZE_SIZE_
-; 0000 0026 #pragma optsize+
-; 0000 0027 #endif
-; 0000 0028 
-; 0000 0029 // Input/Output Ports initialization
-; 0000 002A // Port A initialization
-; 0000 002B // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
-; 0000 002C DDRA=(0<<DDA7) | (0<<DDA6) | (0<<DDA5) | (0<<DDA4) | (0<<DDA3) | (0<<DDA2) | (0<<DDA1) | (0<<DDA0);
+; 0000 0026 #ifdef _OPTIMIZE_SIZE_
+; 0000 0027 #pragma optsize+
+; 0000 0028 #endif
+; 0000 0029 
+; 0000 002A // Input/Output Ports initialization
+; 0000 002B // Port A initialization
+; 0000 002C // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
+; 0000 002D DDRA=(0<<DDA7) | (0<<DDA6) | (0<<DDA5) | (0<<DDA4) | (0<<DDA3) | (0<<DDA2) | (0<<DDA1) | (0<<DDA0);
 	OUT  0x1,R30
-; 0000 002D // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
-; 0000 002E PORTA=(0<<PORTA7) | (0<<PORTA6) | (0<<PORTA5) | (0<<PORTA4) | (0<<PORTA3) | (0<<PORTA2) | (0<<PORTA1) | (0<<PORTA0);
+; 0000 002E // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
+; 0000 002F PORTA=(0<<PORTA7) | (0<<PORTA6) | (0<<PORTA5) | (0<<PORTA4) | (0<<PORTA3) | (0<<PORTA2) | (0<<PORTA1) | (0<<PORTA0);
 	OUT  0x2,R30
-; 0000 002F 
-; 0000 0030 // Port B initialization
-; 0000 0031 // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
-; 0000 0032 DDRB=(0<<DDB7) | (0<<DDB6) | (0<<DDB5) | (0<<DDB4) | (0<<DDB3) | (0<<DDB2) | (0<<DDB1) | (0<<DDB0);
+; 0000 0030 
+; 0000 0031 // Port B initialization
+; 0000 0032 // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
+; 0000 0033 DDRB=(0<<DDB7) | (0<<DDB6) | (0<<DDB5) | (0<<DDB4) | (0<<DDB3) | (0<<DDB2) | (0<<DDB1) | (0<<DDB0);
 	OUT  0x4,R30
-; 0000 0033 // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
-; 0000 0034 PORTB=(0<<PORTB7) | (0<<PORTB6) | (0<<PORTB5) | (0<<PORTB4) | (0<<PORTB3) | (0<<PORTB2) | (0<<PORTB1) | (0<<PORTB0);
+; 0000 0034 // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
+; 0000 0035 PORTB=(0<<PORTB7) | (0<<PORTB6) | (0<<PORTB5) | (0<<PORTB4) | (0<<PORTB3) | (0<<PORTB2) | (0<<PORTB1) | (0<<PORTB0);
 	OUT  0x5,R30
-; 0000 0035 
-; 0000 0036 // Port C initialization
-; 0000 0037 // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
-; 0000 0038 DDRC=(0<<DDC7) | (0<<DDC6) | (0<<DDC5) | (0<<DDC4) | (0<<DDC3) | (0<<DDC2) | (0<<DDC1) | (0<<DDC0);
+; 0000 0036 
+; 0000 0037 // Port C initialization
+; 0000 0038 // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
+; 0000 0039 DDRC=(0<<DDC7) | (0<<DDC6) | (0<<DDC5) | (0<<DDC4) | (0<<DDC3) | (0<<DDC2) | (0<<DDC1) | (0<<DDC0);
 	OUT  0x7,R30
-; 0000 0039 // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
-; 0000 003A PORTC=(0<<PORTC7) | (0<<PORTC6) | (0<<PORTC5) | (0<<PORTC4) | (0<<PORTC3) | (0<<PORTC2) | (0<<PORTC1) | (0<<PORTC0);
+; 0000 003A // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
+; 0000 003B PORTC=(0<<PORTC7) | (0<<PORTC6) | (0<<PORTC5) | (0<<PORTC4) | (0<<PORTC3) | (0<<PORTC2) | (0<<PORTC1) | (0<<PORTC0);
 	OUT  0x8,R30
-; 0000 003B 
-; 0000 003C // Port D initialization
-; 0000 003D // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
-; 0000 003E DDRD=(0<<DDD7) | (1<<DDD6) | (0<<DDD5) | (0<<DDD4) | (0<<DDD3) | (0<<DDD2) | (0<<DDD1) | (0<<DDD0);
-	LDI  R30,LOW(64)
+; 0000 003C 
+; 0000 003D // Port D initialization
+; 0000 003E // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
+; 0000 003F DDRD=(0<<DDD7) | (1<<DDD6) | (1<<DDD5) | (0<<DDD4) | (0<<DDD3) | (0<<DDD2) | (0<<DDD1) | (0<<DDD0);
+	LDI  R30,LOW(96)
 	OUT  0xA,R30
-; 0000 003F // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
-; 0000 0040 PORTD=(0<<PORTD7) | (0<<PORTD6) | (0<<PORTD5) | (0<<PORTD4) | (0<<PORTD3) | (0<<PORTD2) | (0<<PORTD1) | (0<<PORTD0);
+; 0000 0040 // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
+; 0000 0041 PORTD=(0<<PORTD7) | (0<<PORTD6) | (0<<PORTD5) | (0<<PORTD4) | (0<<PORTD3) | (0<<PORTD2) | (0<<PORTD1) | (0<<PORTD0);
 	LDI  R30,LOW(0)
 	OUT  0xB,R30
-; 0000 0041 
-; 0000 0042 // Timer/Counter 0 initialization
-; 0000 0043 // Clock source: System Clock
-; 0000 0044 // Clock value: Timer 0 Stopped
-; 0000 0045 // Mode: Normal top=0xFF
-; 0000 0046 // OC0A output: Disconnected
-; 0000 0047 // OC0B output: Disconnected
-; 0000 0048 TCCR0A=(0<<COM0A1) | (0<<COM0A0) | (0<<COM0B1) | (0<<COM0B0) | (0<<WGM01) | (0<<WGM00);
+; 0000 0042 
+; 0000 0043 // Timer/Counter 0 initialization
+; 0000 0044 // Clock source: System Clock
+; 0000 0045 // Clock value: Timer 0 Stopped
+; 0000 0046 // Mode: Normal top=0xFF
+; 0000 0047 // OC0A output: Disconnected
+; 0000 0048 // OC0B output: Disconnected
+; 0000 0049 TCCR0A=(0<<COM0A1) | (0<<COM0A0) | (0<<COM0B1) | (0<<COM0B0) | (0<<WGM01) | (0<<WGM00);
 	OUT  0x24,R30
-; 0000 0049 TCCR0B=(0<<WGM02) | (0<<CS02) | (0<<CS01) | (0<<CS00);
+; 0000 004A TCCR0B=(0<<WGM02) | (0<<CS02) | (0<<CS01) | (0<<CS00);
 	OUT  0x25,R30
-; 0000 004A TCNT0=0x00;
+; 0000 004B TCNT0=0x00;
 	OUT  0x26,R30
-; 0000 004B OCR0A=0x00;
+; 0000 004C OCR0A=0x00;
 	OUT  0x27,R30
-; 0000 004C OCR0B=0x00;
+; 0000 004D OCR0B=0x00;
 	OUT  0x28,R30
-; 0000 004D 
-; 0000 004E // Timer/Counter 1 initialization
-; 0000 004F // Clock source: System Clock
-; 0000 0050 // Clock value: Timer1 Stopped
-; 0000 0051 // Mode: Normal top=0xFFFF
-; 0000 0052 // OC1A output: Disconnected
-; 0000 0053 // OC1B output: Disconnected
-; 0000 0054 // Noise Canceler: Off
-; 0000 0055 // Input Capture on Falling Edge
-; 0000 0056 // Timer1 Overflow Interrupt: Off
-; 0000 0057 // Input Capture Interrupt: Off
-; 0000 0058 // Compare A Match Interrupt: Off
-; 0000 0059 // Compare B Match Interrupt: Off
-; 0000 005A TCCR1A=(0<<COM1A1) | (0<<COM1A0) | (0<<COM1B1) | (0<<COM1B0) | (0<<WGM11) | (0<<WGM10);
+; 0000 004E 
+; 0000 004F // Timer/Counter 1 initialization
+; 0000 0050 // Clock source: System Clock
+; 0000 0051 // Clock value: Timer1 Stopped
+; 0000 0052 // Mode: Normal top=0xFFFF
+; 0000 0053 // OC1A output: Disconnected
+; 0000 0054 // OC1B output: Disconnected
+; 0000 0055 // Noise Canceler: Off
+; 0000 0056 // Input Capture on Falling Edge
+; 0000 0057 // Timer1 Overflow Interrupt: Off
+; 0000 0058 // Input Capture Interrupt: Off
+; 0000 0059 // Compare A Match Interrupt: Off
+; 0000 005A // Compare B Match Interrupt: Off
+; 0000 005B TCCR1A=(0<<COM1A1) | (0<<COM1A0) | (0<<COM1B1) | (0<<COM1B0) | (0<<WGM11) | (0<<WGM10);
 	STS  128,R30
-; 0000 005B TCCR1B=(0<<ICNC1) | (0<<ICES1) | (0<<WGM13) | (0<<WGM12) | (0<<CS12) | (0<<CS11) | (0<<CS10);
+; 0000 005C TCCR1B=(0<<ICNC1) | (0<<ICES1) | (0<<WGM13) | (0<<WGM12) | (0<<CS12) | (0<<CS11) | (0<<CS10);
 	STS  129,R30
-; 0000 005C TCNT1H=0x00;
+; 0000 005D TCNT1H=0x00;
 	STS  133,R30
-; 0000 005D TCNT1L=0x00;
+; 0000 005E TCNT1L=0x00;
 	STS  132,R30
-; 0000 005E ICR1H=0x00;
+; 0000 005F ICR1H=0x00;
 	STS  135,R30
-; 0000 005F ICR1L=0x00;
+; 0000 0060 ICR1L=0x00;
 	STS  134,R30
-; 0000 0060 OCR1AH=0x00;
+; 0000 0061 OCR1AH=0x00;
 	STS  137,R30
-; 0000 0061 OCR1AL=0x00;
+; 0000 0062 OCR1AL=0x00;
 	STS  136,R30
-; 0000 0062 OCR1BH=0x00;
+; 0000 0063 OCR1BH=0x00;
 	STS  139,R30
-; 0000 0063 OCR1BL=0x00;
+; 0000 0064 OCR1BL=0x00;
 	STS  138,R30
-; 0000 0064 
-; 0000 0065 // Timer/Counter 2 initialization
-; 0000 0066 // Clock source: System Clock
-; 0000 0067 // Clock value: Timer2 Stopped
-; 0000 0068 // Mode: Normal top=0xFF
-; 0000 0069 // OC2A output: Disconnected
-; 0000 006A // OC2B output: Disconnected
-; 0000 006B ASSR=(0<<EXCLK) | (0<<AS2);
+; 0000 0065 
+; 0000 0066 // Timer/Counter 2 initialization
+; 0000 0067 // Clock source: System Clock
+; 0000 0068 // Clock value: Timer2 Stopped
+; 0000 0069 // Mode: Normal top=0xFF
+; 0000 006A // OC2A output: Disconnected
+; 0000 006B // OC2B output: Disconnected
+; 0000 006C ASSR=(0<<EXCLK) | (0<<AS2);
 	STS  182,R30
-; 0000 006C TCCR2A=(0<<COM2A1) | (0<<COM2A0) | (0<<COM2B1) | (0<<COM2B0) | (0<<WGM21) | (0<<WGM20);
+; 0000 006D TCCR2A=(0<<COM2A1) | (0<<COM2A0) | (0<<COM2B1) | (0<<COM2B0) | (0<<WGM21) | (0<<WGM20);
 	STS  176,R30
-; 0000 006D TCCR2B=(0<<WGM22) | (0<<CS22) | (0<<CS21) | (0<<CS20);
+; 0000 006E TCCR2B=(0<<WGM22) | (0<<CS22) | (0<<CS21) | (0<<CS20);
 	STS  177,R30
-; 0000 006E TCNT2=0x00;
+; 0000 006F TCNT2=0x00;
 	STS  178,R30
-; 0000 006F OCR2A=0x00;
+; 0000 0070 OCR2A=0x00;
 	STS  179,R30
-; 0000 0070 OCR2B=0x00;
+; 0000 0071 OCR2B=0x00;
 	STS  180,R30
-; 0000 0071 
-; 0000 0072 // Timer/Counter 0 Interrupt(s) initialization
-; 0000 0073 TIMSK0=(0<<OCIE0B) | (0<<OCIE0A) | (0<<TOIE0);
+; 0000 0072 
+; 0000 0073 // Timer/Counter 0 Interrupt(s) initialization
+; 0000 0074 TIMSK0=(0<<OCIE0B) | (0<<OCIE0A) | (0<<TOIE0);
 	STS  110,R30
-; 0000 0074 
-; 0000 0075 // Timer/Counter 1 Interrupt(s) initialization
-; 0000 0076 TIMSK1=(0<<ICIE1) | (0<<OCIE1B) | (0<<OCIE1A) | (0<<TOIE1);
+; 0000 0075 
+; 0000 0076 // Timer/Counter 1 Interrupt(s) initialization
+; 0000 0077 TIMSK1=(0<<ICIE1) | (0<<OCIE1B) | (0<<OCIE1A) | (0<<TOIE1);
 	STS  111,R30
-; 0000 0077 
-; 0000 0078 // Timer/Counter 2 Interrupt(s) initialization
-; 0000 0079 TIMSK2=(0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2);
+; 0000 0078 
+; 0000 0079 // Timer/Counter 2 Interrupt(s) initialization
+; 0000 007A TIMSK2=(0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2);
 	STS  112,R30
-; 0000 007A 
-; 0000 007B // External Interrupt(s) initialization
-; 0000 007C // INT0: Off
-; 0000 007D // INT1: Off
-; 0000 007E // INT2: Off
-; 0000 007F // Interrupt on any change on pins PCINT0-7: Off
-; 0000 0080 // Interrupt on any change on pins PCINT8-15: Off
-; 0000 0081 // Interrupt on any change on pins PCINT16-23: Off
-; 0000 0082 // Interrupt on any change on pins PCINT24-31: Off
-; 0000 0083 EICRA=(0<<ISC21) | (0<<ISC20) | (0<<ISC11) | (0<<ISC10) | (0<<ISC01) | (0<<ISC00);
+; 0000 007B 
+; 0000 007C // External Interrupt(s) initialization
+; 0000 007D // INT0: Off
+; 0000 007E // INT1: Off
+; 0000 007F // INT2: Off
+; 0000 0080 // Interrupt on any change on pins PCINT0-7: Off
+; 0000 0081 // Interrupt on any change on pins PCINT8-15: Off
+; 0000 0082 // Interrupt on any change on pins PCINT16-23: Off
+; 0000 0083 // Interrupt on any change on pins PCINT24-31: Off
+; 0000 0084 EICRA=(0<<ISC21) | (0<<ISC20) | (0<<ISC11) | (0<<ISC10) | (0<<ISC01) | (0<<ISC00);
 	STS  105,R30
-; 0000 0084 EIMSK=(0<<INT2) | (0<<INT1) | (0<<INT0);
+; 0000 0085 EIMSK=(0<<INT2) | (0<<INT1) | (0<<INT0);
 	OUT  0x1D,R30
-; 0000 0085 PCICR=(0<<PCIE3) | (0<<PCIE2) | (0<<PCIE1) | (0<<PCIE0);
+; 0000 0086 PCICR=(0<<PCIE3) | (0<<PCIE2) | (0<<PCIE1) | (0<<PCIE0);
 	STS  104,R30
-; 0000 0086 
-; 0000 0087 // USART0 initialization
-; 0000 0088 // USART0 disabled
-; 0000 0089 UCSR0B=(0<<RXCIE0) | (0<<TXCIE0) | (0<<UDRIE0) | (0<<RXEN0) | (0<<TXEN0) | (0<<UCSZ02) | (0<<RXB80) | (0<<TXB80);
+; 0000 0087 
+; 0000 0088 // USART0 initialization
+; 0000 0089 // USART0 disabled
+; 0000 008A UCSR0B=(0<<RXCIE0) | (0<<TXCIE0) | (0<<UDRIE0) | (0<<RXEN0) | (0<<TXEN0) | (0<<UCSZ02) | (0<<RXB80) | (0<<TXB80);
 	STS  193,R30
-; 0000 008A 
-; 0000 008B // USART1 initialization
-; 0000 008C // USART1 disabled
-; 0000 008D UCSR1B=(0<<RXCIE1) | (0<<TXCIE1) | (0<<UDRIE1) | (0<<RXEN1) | (0<<TXEN1) | (0<<UCSZ12) | (0<<RXB81) | (0<<TXB81);
+; 0000 008B 
+; 0000 008C // USART1 initialization
+; 0000 008D // USART1 disabled
+; 0000 008E UCSR1B=(0<<RXCIE1) | (0<<TXCIE1) | (0<<UDRIE1) | (0<<RXEN1) | (0<<TXEN1) | (0<<UCSZ12) | (0<<RXB81) | (0<<TXB81);
 	STS  201,R30
-; 0000 008E 
-; 0000 008F // Analog Comparator initialization
-; 0000 0090 // Analog Comparator: Off
-; 0000 0091 // The Analog Comparator's positive input is
-; 0000 0092 // connected to the AIN0 pin
-; 0000 0093 // The Analog Comparator's negative input is
-; 0000 0094 // connected to the AIN1 pin
-; 0000 0095 ACSR=(1<<ACD) | (0<<ACBG) | (0<<ACO) | (0<<ACI) | (0<<ACIE) | (0<<ACIC) | (0<<ACIS1) | (0<<ACIS0);
+; 0000 008F 
+; 0000 0090 // Analog Comparator initialization
+; 0000 0091 // Analog Comparator: Off
+; 0000 0092 // The Analog Comparator's positive input is
+; 0000 0093 // connected to the AIN0 pin
+; 0000 0094 // The Analog Comparator's negative input is
+; 0000 0095 // connected to the AIN1 pin
+; 0000 0096 ACSR=(1<<ACD) | (0<<ACBG) | (0<<ACO) | (0<<ACI) | (0<<ACIE) | (0<<ACIC) | (0<<ACIS1) | (0<<ACIS0);
 	LDI  R30,LOW(128)
 	OUT  0x30,R30
-; 0000 0096 ADCSRB=(0<<ACME);
+; 0000 0097 ADCSRB=(0<<ACME);
 	LDI  R30,LOW(0)
 	STS  123,R30
-; 0000 0097 // Digital input buffer on AIN0: On
-; 0000 0098 // Digital input buffer on AIN1: On
-; 0000 0099 DIDR1=(0<<AIN0D) | (0<<AIN1D);
+; 0000 0098 // Digital input buffer on AIN0: On
+; 0000 0099 // Digital input buffer on AIN1: On
+; 0000 009A DIDR1=(0<<AIN0D) | (0<<AIN1D);
 	STS  127,R30
-; 0000 009A 
-; 0000 009B // ADC initialization
-; 0000 009C // ADC disabled
-; 0000 009D ADCSRA=(0<<ADEN) | (0<<ADSC) | (0<<ADATE) | (0<<ADIF) | (0<<ADIE) | (0<<ADPS2) | (0<<ADPS1) | (0<<ADPS0);
+; 0000 009B 
+; 0000 009C // ADC initialization
+; 0000 009D // ADC disabled
+; 0000 009E ADCSRA=(0<<ADEN) | (0<<ADSC) | (0<<ADATE) | (0<<ADIF) | (0<<ADIE) | (0<<ADPS2) | (0<<ADPS1) | (0<<ADPS0);
 	STS  122,R30
-; 0000 009E 
-; 0000 009F // SPI initialization
-; 0000 00A0 // SPI disabled
-; 0000 00A1 SPCR=(0<<SPIE) | (0<<SPE) | (0<<DORD) | (0<<MSTR) | (0<<CPOL) | (0<<CPHA) | (0<<SPR1) | (0<<SPR0);
+; 0000 009F 
+; 0000 00A0 // SPI initialization
+; 0000 00A1 // SPI disabled
+; 0000 00A2 SPCR=(0<<SPIE) | (0<<SPE) | (0<<DORD) | (0<<MSTR) | (0<<CPOL) | (0<<CPHA) | (0<<SPR1) | (0<<SPR0);
 	OUT  0x2C,R30
-; 0000 00A2 
-; 0000 00A3 // TWI initialization
-; 0000 00A4 // TWI disabled
-; 0000 00A5 TWCR=(0<<TWEA) | (0<<TWSTA) | (0<<TWSTO) | (0<<TWEN) | (0<<TWIE);
+; 0000 00A3 
+; 0000 00A4 // TWI initialization
+; 0000 00A5 // TWI disabled
+; 0000 00A6 TWCR=(0<<TWEA) | (0<<TWSTA) | (0<<TWSTO) | (0<<TWEN) | (0<<TWIE);
 	STS  188,R30
-; 0000 00A6 
-; 0000 00A7 PORTD.6 = 1;
+; 0000 00A7 
+; 0000 00A8 PORTD.6 = 1;
 	SBI  0xB,6
-; 0000 00A8 while (1)
-_0x5:
-; 0000 00A9 {
-; 0000 00AA PORTD.6 = 0;
+; 0000 00A9 PORTD.5 = 1;
+	SBI  0xB,5
+; 0000 00AA while (1)
+_0x7:
+; 0000 00AB {
+; 0000 00AC PORTD.6 = !PORTD.6;
+	SBIS 0xB,6
+	RJMP _0xA
 	CBI  0xB,6
-; 0000 00AB delay_ms(1);
-	LDI  R26,LOW(1)
+	RJMP _0xB
+_0xA:
+	SBI  0xB,6
+_0xB:
+; 0000 00AD PORTD.5 = !PORTD.5;
+	SBIS 0xB,5
+	RJMP _0xC
+	CBI  0xB,5
+	RJMP _0xD
+_0xC:
+	SBI  0xB,5
+_0xD:
+; 0000 00AE delay_ms(100);
+	LDI  R26,LOW(100)
 	LDI  R27,0
 	RCALL _delay_ms
-; 0000 00AC PORTD.6 = 1;
-	SBI  0xB,6
-; 0000 00AD }
-	RJMP _0x5
-; 0000 00AE }
-_0xC:
-	RJMP _0xC
+; 0000 00AF }
+	RJMP _0x7
+; 0000 00B0 }
+_0xE:
+	RJMP _0xE
 ; .FEND
 
 	.CSEG
