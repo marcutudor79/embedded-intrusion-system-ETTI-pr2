@@ -1,5 +1,6 @@
-VERSION:3 SOURCE_TIMESTAMP:56A781B9
+VERSION:3 SOURCE_TIMESTAMP:56AB614E
 NODE:I LEVEL:0 LINE:1 "D:\cvavreval\inc\mega164a.h"
-NODE:F LEVEL:0 LINE:3 "error_mcu(void)"
-NODE:F LEVEL:0 LINE:15 "heartbeat_mcu(void)"
-NODE:F LEVEL:0 LINE:24 "initialise_mcu(void)"
+NODE:M LEVEL:0 LINE:4 "ADC_VREF_TYPE"
+NODE:F LEVEL:0 LINE:7 "error_mcu(void)"
+NODE:F LEVEL:0 LINE:19 "heartbeat_mcu(void)"
+NODE:F LEVEL:0 LINE:28 "initialise_mcu(void)"

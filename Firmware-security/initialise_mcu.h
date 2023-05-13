@@ -1,5 +1,9 @@
 #include <mega164a.h>
 
+// Voltage Reference: AVCC pin
+#define ADC_VREF_TYPE ((0<<REFS1) | (1<<REFS0) | (0<<ADLAR))
+
+
 void error_mcu() {
     
     DDRD=(0<<DDD7) | (1<<DDD6) | (0<<DDD5) | (1<<DDD4) | (0<<DDD3) | (0<<DDD2) | (0<<DDD1) | (0<<DDD0);
@@ -151,6 +155,17 @@ unsigned int initialise_mcu() {
     // Digital input buffer on AIN1: On
     DIDR1=(0<<AIN0D) | (0<<AIN1D);
     
+// ADC initialization
+// ADC Clock frequency: 625.000 kHz
+// ADC Voltage Reference: AVCC pin
+// ADC Auto Trigger Source: Free Running
+// Digital input buffers on ADC0: Off, ADC1: On, ADC2: On, ADC3: On
+// ADC4: On, ADC5: On, ADC6: On, ADC7: On
+DIDR0=(0<<ADC7D) | (0<<ADC6D) | (0<<ADC5D) | (0<<ADC4D) | (0<<ADC3D) | (0<<ADC2D) | (0<<ADC1D) | (1<<ADC0D);
+ADMUX=ADC_VREF_TYPE;
+ADCSRA=(1<<ADEN) | (0<<ADSC) | (1<<ADATE) | (0<<ADIF) | (0<<ADIE) | (1<<ADPS2) | (0<<ADPS1) | (1<<ADPS0);
+ADCSRB=(0<<ADTS2) | (0<<ADTS1) | (0<<ADTS0);
+    
     // SPI initialization
     // SPI disabled
     SPCR=(0<<SPIE) | (0<<SPE) | (0<<DORD) | (0<<MSTR) | (0<<CPOL) | (0<<CPHA) | (0<<SPR1) | (0<<SPR0);
@@ -159,8 +174,6 @@ unsigned int initialise_mcu() {
     // TWI disabled
     TWCR=(0<<TWEA) | (0<<TWSTA) | (0<<TWSTO) | (0<<TWEN) | (0<<TWIE); 
     
-    //initialise adc
-    ADCSRA=0b10010000; 
 
     return 0;
 }

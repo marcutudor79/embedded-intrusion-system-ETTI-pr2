@@ -1,5 +1,5 @@
 
-;CodeVisionAVR C Compiler V3.51 
+;CodeVisionAVR C Compiler V3.51 Evaluation
 ;(C) Copyright 1998-2023 Pavel Haiduc, HP InfoTech S.R.L.
 ;http://www.hpinfotech.ro
 
@@ -1600,14 +1600,16 @@ _initialise_mcu:
 	STS  196,R30
 	LDI  R30,LOW(0)
 	STS  201,R30
-	LDI  R30,LOW(128)
-	OUT  0x30,R30
+	LDI  R30,LOW(1)
+	STS  126,R30
+	LDI  R30,LOW(64)
+	STS  124,R30
+	LDI  R30,LOW(165)
+	STS  122,R30
 	LDI  R30,LOW(0)
-	STS  127,R30
+	STS  123,R30
 	OUT  0x2C,R30
 	STS  188,R30
-	LDI  R30,LOW(144)
-	STS  122,R30
 	LDI  R30,LOW(0)
 	LDI  R31,HIGH(0)
 	RET
@@ -1617,58 +1619,61 @@ _read_voltage:
 	ST   -Y,R17
 	MOV  R17,R26
 ;	channel -> R17
-	ANDI R17,LOW(7)
 	MOV  R30,R17
-	ORI  R30,LOW(0x60)
+	ORI  R30,0x40
 	STS  124,R30
 	LDS  R30,122
 	ORI  R30,0x40
 	STS  122,R30
 _0xC:
 	LDS  R30,122
-	ANDI R30,LOW(0x40)
-	BRNE _0xC
+	ANDI R30,LOW(0x10)
+	BREQ _0xC
 	LDS  R30,122
 	ORI  R30,0x10
 	STS  122,R30
-	LDS  R30,121
+	LDS  R30,120
+	LDS  R31,120+1
 	RJMP _0x2060001
 ; .FEND
 _read_light:
 ; .FSTART _read_light
 	ST   -Y,R17
-;	light_level -> R17
-	LDI  R26,LOW(0)
+	ST   -Y,R16
+;	light_level -> R16,R17
+	LDI  R26,LOW(1)
 	RCALL _read_voltage
-	MOV  R17,R30
-	RJMP _0x2060001
+	MOVW R16,R30
+	LD   R16,Y+
+	LD   R17,Y+
+	RET
 ; .FEND
 ;	i -> R16,R17
 ;void main(void) {
 ; 0000 0009 void main(void) {
 _main:
 ; .FSTART _main
-; 0000 000A unsigned char light_level = 0;
+; 0000 000A unsigned int light = 0;
 ; 0000 000B if (!initialise_mcu())
-;	light_level -> R17
-	LDI  R17,0
+;	light -> R16,R17
+	__GETWRN 16,17,0
 	RCALL _initialise_mcu
 	SBIW R30,0
 	BRNE _0x18
 ; 0000 000C while (1) {
 _0x19:
-; 0000 000D 
-; 0000 000E light_level = read_light();
+; 0000 000D light = 0;
+	__GETWRN 16,17,0
+; 0000 000E light = read_light();
 	RCALL _read_light
-	MOV  R17,R30
+	MOVW R16,R30
 ; 0000 000F 
 ; 0000 0010 /* Wait for empty transmit buffer */
-; 0000 0011 printf("light level: %d \n", light_level);
+; 0000 0011 printf("light level: %d \n", light);
 	__POINTW1FN _0x0,0
 	ST   -Y,R31
 	ST   -Y,R30
-	MOV  R30,R17
-	CLR  R31
+	MOVW R30,R16
 	CLR  R22
 	CLR  R23
 	RCALL __PUTPARD1
