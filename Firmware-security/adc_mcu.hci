@@ -1,5 +1,4 @@
-VERSION:3 SOURCE_TIMESTAMP:56AB5E4A
+VERSION:3 SOURCE_TIMESTAMP:56ADA77A
 NODE:M LEVEL:0 LINE:1 "ADMUX_NOCHANNEL"
-NODE:M LEVEL:0 LINE:3 "ADC_VREF_TYPE"
-NODE:F LEVEL:0 LINE:6 "read_voltage(unsigned char channel)"
-NODE:F LEVEL:0 LINE:27 "read_light(void)"
+NODE:F LEVEL:0 LINE:3 "read_voltage(unsigned char channel)"
+NODE:F LEVEL:0 LINE:21 "read_light(void)"
