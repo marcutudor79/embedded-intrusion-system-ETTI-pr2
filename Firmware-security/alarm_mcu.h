@@ -1,4 +1,4 @@
-#include <mega164a.h>
+ #include <mega164a.h>
 #include <delay.h>
 
 void ring_alarm(){
@@ -23,7 +23,7 @@ char laser_spoof_check(unsigned int env_light, char* counter) {
         printf("counter value is: %u \n", counter);
                 
         PORTD.4 = 0;
-        delay_ms(15);
+        delay_ms(50);
                 
         light_check = read_light(); 
         
@@ -35,6 +35,7 @@ char laser_spoof_check(unsigned int env_light, char* counter) {
         }                
                  
         PORTD.4 = 1;
+        delay_ms(100);
         *counter = 0;
     }
     
