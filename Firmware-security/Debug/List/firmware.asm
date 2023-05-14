@@ -1,5 +1,5 @@
 
-;CodeVisionAVR C Compiler V3.51 
+;CodeVisionAVR C Compiler V3.51 Evaluation
 ;(C) Copyright 1998-2023 Pavel Haiduc, HP InfoTech S.R.L.
 ;http://www.hpinfotech.ro
 
@@ -1465,26 +1465,13 @@ _tbl16_G100:
 	.DB  0x0,0x10,0x0,0x1,0x10,0x0,0x1,0x0
 
 _0x0:
-	.DB  0x63,0x6F,0x75,0x6E,0x74,0x65,0x72,0x20
-	.DB  0x76,0x61,0x6C,0x75,0x65,0x20,0x69,0x73
-	.DB  0x3A,0x20,0x25,0x75,0x20,0xA,0x0,0x65
-	.DB  0x6E,0x76,0x20,0x6C,0x69,0x67,0x68,0x74
-	.DB  0x20,0x69,0x73,0x3A,0x20,0x25,0x64,0x2C
-	.DB  0x20,0x6C,0x69,0x67,0x68,0x74,0x5F,0x63
-	.DB  0x68,0x65,0x63,0x6B,0x20,0x69,0x73,0x20
-	.DB  0x25,0x64,0x0,0x6C,0x69,0x67,0x68,0x74
-	.DB  0x20,0x6C,0x65,0x76,0x65,0x6C,0x20,0x64
-	.DB  0x69,0x66,0x66,0x20,0x69,0x73,0x3A,0x20
-	.DB  0x25,0x64,0x20,0xA,0x0,0x73,0x65,0x6E
-	.DB  0x73,0x6F,0x72,0x20,0x6C,0x69,0x67,0x68
-	.DB  0x74,0x3A,0x20,0x25,0x75,0x2C,0x20,0x72
-	.DB  0x61,0x6E,0x64,0x6F,0x6D,0x5F,0x63,0x68
-	.DB  0x65,0x63,0x6B,0x3A,0x20,0x25,0x64,0x2C
-	.DB  0x20,0x65,0x6E,0x76,0x5F,0x6C,0x69,0x67
-	.DB  0x68,0x74,0x3A,0x20,0x25,0x75,0x20,0xA
-	.DB  0x0,0x52,0x41,0x4E,0x44,0x4F,0x4D,0x20
-	.DB  0x43,0x48,0x45,0x43,0x4B,0x21,0x20,0xA
-	.DB  0x0
+	.DB  0x73,0x65,0x6E,0x73,0x6F,0x72,0x20,0x6C
+	.DB  0x69,0x67,0x68,0x74,0x3A,0x20,0x25,0x75
+	.DB  0x2C,0x20,0x72,0x61,0x6E,0x64,0x6F,0x6D
+	.DB  0x5F,0x63,0x68,0x65,0x63,0x6B,0x3A,0x20
+	.DB  0x25,0x64,0x2C,0x20,0x65,0x6E,0x76,0x5F
+	.DB  0x6C,0x69,0x67,0x68,0x74,0x3A,0x20,0x25
+	.DB  0x75,0x20,0xA,0x0
 _0x2020060:
 	.DB  0x1
 _0x2020000:
@@ -1588,344 +1575,522 @@ __GLOBAL_INI_END:
 	.EQU __sm_adc_noise_red=0x02
 	.SET power_ctrl_reg=smcr
 	#endif
+;void main(void) {
+; 0000 0006 void main(void) {
 
 	.CSEG
-_heartbeat_mcu:
-; .FSTART _heartbeat_mcu
-	SBIS 0xB,6
-	RJMP _0x3
-	CBI  0xB,6
-	RJMP _0x4
-_0x3:
+_main:
+; .FSTART _main
+; 0000 0007 
+; 0000 0008 // initialize variable for light on sensor
+; 0000 0009 unsigned int light = 0;
+; 0000 000A 
+; 0000 000B // initialize variable for the light in the environment value
+; 0000 000C unsigned int env_light = 0;
+; 0000 000D 
+; 0000 000E // initialize counters for random + spoof checks + first run of the loop
+; 0000 000F // char spoofCheck_counter = 0;
+; 0000 0010 char firstRun = 0;
+; 0000 0011 char alarmRing = 0;
+; 0000 0012 char randomCheck_counter = rand() % 70;
+; 0000 0013 
+; 0000 0014 
+; 0000 0015 // initialize ports on mcu and the adc
+; 0000 0016 initialise_mcu();
+	SBIW R28,1
+;	light -> R16,R17
+;	env_light -> R18,R19
+;	firstRun -> R21
+;	alarmRing -> R20
+;	randomCheck_counter -> Y+0
+	__GETWRN 16,17,0
+	__GETWRN 18,19,0
+	LDI  R21,0
+	LDI  R20,0
+	RCALL SUBOPT_0x0
+	RCALL _initialise_mcu
+; 0000 0017 
+; 0000 0018 // reads the light from the sensor without laser shining on it
+; 0000 0019 env_light = read_light();
+	RCALL _read_light
+	MOVW R18,R30
+; 0000 001A delay_ms(100);
+	LDI  R26,LOW(100)
+	LDI  R27,0
+	RCALL _delay_ms
+; 0000 001B 
+; 0000 001C // turn on the laser
+; 0000 001D PORTD.4 = 1;
+	SBI  0xB,4
+; 0000 001E 
+; 0000 001F 
+; 0000 0020 while (1) {
+_0x5:
+; 0000 0021 
+; 0000 0022 if (firstRun == 0) {
+	CPI  R21,0
+	BRNE _0x8
+; 0000 0023 firstRun = 1;
+	LDI  R21,LOW(1)
+; 0000 0024 delay_ms(100);
+	LDI  R26,LOW(100)
+	LDI  R27,0
+	RCALL _delay_ms
+; 0000 0025 }
+; 0000 0026 
+; 0000 0027 // reads the light from the sensor with laser shining on it
+; 0000 0028 light = read_light();
+_0x8:
+	RCALL _read_light
+	MOVW R16,R30
+; 0000 0029 
+; 0000 002A printf("sensor light: %u, random_check: %d, env_light: %u \n", light, randomCheck_counter, env_light);
+	__POINTW1FN _0x0,0
+	ST   -Y,R31
+	ST   -Y,R30
+	MOVW R30,R16
+	CLR  R22
+	CLR  R23
+	RCALL __PUTPARD1
+	LDD  R30,Y+6
+	CLR  R31
+	CLR  R22
+	CLR  R23
+	RCALL __PUTPARD1
+	MOVW R30,R18
+	CLR  R22
+	CLR  R23
+	RCALL __PUTPARD1
+	LDI  R24,12
+	RCALL _printf
+	ADIW R28,14
+; 0000 002B 
+; 0000 002C // checks if the laser is shining on the sensor
+; 0000 002D if (light <= env_light) {
+	__CPWRR 18,19,16,17
+	BRLO _0x9
+; 0000 002E //ring_alarm();
+; 0000 002F if (alarmRing == 0) {
+	CPI  R20,0
+	BRNE _0xA
+; 0000 0030 PORTD.6 = 1;
 	SBI  0xB,6
-_0x4:
-	RET
+; 0000 0031 PORTB.0 = 1;
+	SBI  0x5,0
+; 0000 0032 alarmRing = 1;
+	LDI  R20,LOW(1)
+; 0000 0033 }
+; 0000 0034 }
+_0xA:
+; 0000 0035 
+; 0000 0036 // checks if the laser was spoofed by another light source
+; 0000 0037 /* if(laser_spoof_check(env_light, &spoofCheck_counter)) {
+; 0000 0038 //ring_alarm();
+; 0000 0039 if (alarmRing == 0) {
+; 0000 003A PORTD.6 = 1;
+; 0000 003B PORTB.0 = 1;
+; 0000 003C alarmRing = 1;
+; 0000 003D }
+; 0000 003E }
+; 0000 003F */
+; 0000 0040 
+; 0000 0041 // checks randomly within maximum 30s if the light in the environment has changed
+; 0000 0042 if (randomCheck_counter == 0) {
+_0x9:
+	LD   R30,Y
+	CPI  R30,0
+	BRNE _0xF
+; 0000 0043 randomCheck_counter = rand() % 70;
+	RCALL SUBOPT_0x0
+; 0000 0044 PORTD.4 = 0;
+	CBI  0xB,4
+; 0000 0045 if (PORTD.4 != 0)
+	SBIC 0xB,4
+; 0000 0046 PORTD.4 = 0;
+	CBI  0xB,4
+; 0000 0047 delay_ms(100);
+	LDI  R26,LOW(100)
+	LDI  R27,0
+	RCALL _delay_ms
+; 0000 0048 env_light = read_light();
+	RCALL _read_light
+	MOVW R18,R30
+; 0000 0049 PORTD.4 = 1;
+	SBI  0xB,4
+; 0000 004A delay_ms(100);
+	LDI  R26,LOW(100)
+	LDI  R27,0
+	RCALL _delay_ms
+; 0000 004B }
+; 0000 004C 
+; 0000 004D randomCheck_counter -= 1;
+_0xF:
+	LD   R30,Y
+	SUBI R30,LOW(1)
+	ST   Y,R30
+; 0000 004E 
+; 0000 004F }
+	RJMP _0x5
+; 0000 0050 }
+_0x17:
+	RJMP _0x17
 ; .FEND
-_initialise_mcu:
-; .FSTART _initialise_mcu
-	LDI  R30,LOW(128)
-	STS  97,R30
-	LDI  R30,LOW(0)
-	STS  97,R30
-	OUT  0x1,R30
-	OUT  0x2,R30
-	OUT  0x4,R30
-	OUT  0x5,R30
-	OUT  0x7,R30
-	OUT  0x8,R30
-	LDI  R30,LOW(88)
-	OUT  0xA,R30
-	LDI  R30,LOW(0)
-	OUT  0xB,R30
-	OUT  0x24,R30
-	OUT  0x25,R30
-	OUT  0x26,R30
-	OUT  0x27,R30
-	OUT  0x28,R30
-	STS  128,R30
-	STS  129,R30
-	STS  133,R30
-	STS  132,R30
-	STS  135,R30
-	STS  134,R30
-	STS  137,R30
-	STS  136,R30
-	STS  139,R30
-	STS  138,R30
-	STS  182,R30
-	STS  176,R30
-	STS  177,R30
-	STS  178,R30
-	STS  179,R30
-	STS  180,R30
-	STS  110,R30
-	STS  111,R30
-	STS  112,R30
-	STS  105,R30
-	OUT  0x1D,R30
-	STS  104,R30
-	STS  192,R30
-	LDI  R30,LOW(8)
-	STS  193,R30
-	LDI  R30,LOW(6)
-	STS  194,R30
-	LDI  R30,LOW(0)
-	STS  197,R30
-	LDI  R30,LOW(129)
-	STS  196,R30
-	LDI  R30,LOW(0)
-	STS  201,R30
-	LDI  R30,LOW(128)
-	OUT  0x30,R30
-	LDI  R30,LOW(0)
-	STS  127,R30
-	LDI  R30,LOW(1)
-	STS  126,R30
-	LDI  R30,LOW(64)
-	STS  124,R30
-	LDI  R30,LOW(165)
-	STS  122,R30
-	LDI  R30,LOW(0)
-	STS  123,R30
-	OUT  0x2C,R30
-	STS  188,R30
-	LDI  R30,LOW(0)
-	LDI  R31,HIGH(0)
-	RET
-; .FEND
-_read_voltage:
-; .FSTART _read_voltage
+	#ifndef __SLEEP_DEFINED__
+	#define __SLEEP_DEFINED__
+	.EQU __se_bit=0x01
+	.EQU __sm_mask=0x0E
+	.EQU __sm_powerdown=0x04
+	.EQU __sm_powersave=0x06
+	.EQU __sm_standby=0x0C
+	.EQU __sm_ext_standby=0x0E
+	.EQU __sm_adc_noise_red=0x02
+	.SET power_ctrl_reg=smcr
+	#endif
+;unsigned int read_adc(unsigned char adc_input)
+; 0001 0005 {
+
+	.CSEG
+_read_adc:
+; .FSTART _read_adc
+; 0001 0006 ADMUX=adc_input | ADC_VREF_TYPE;
 	ST   -Y,R17
 	MOV  R17,R26
-;	channel -> R17
+;	adc_input -> R17
 	MOV  R30,R17
 	ORI  R30,0x40
 	STS  124,R30
+; 0001 0007 // Delay needed for the stabilization of the ADC input voltage
+; 0001 0008 delay_us(10);
+	__DELAY_USB 67
+; 0001 0009 // Start the AD conversion
+; 0001 000A ADCSRA|=(1<<ADSC);
 	LDS  R30,122
 	ORI  R30,0x40
 	STS  122,R30
-_0x5:
+; 0001 000B // Wait for the AD conversion to complete
+; 0001 000C while ((ADCSRA & (1<<ADIF))==0);
+_0x20003:
 	LDS  R30,122
 	ANDI R30,LOW(0x10)
-	BREQ _0x5
+	BREQ _0x20003
+; 0001 000D ADCSRA|=(1<<ADIF);
 	LDS  R30,122
 	ORI  R30,0x10
 	STS  122,R30
+; 0001 000E return ADCW;
 	LDS  R30,120
 	LDS  R31,120+1
-	RJMP _0x20A0001
+	JMP  _0x20A0001
+; 0001 000F }
 ; .FEND
+;unsigned int read_light() {
+; 0001 0012 unsigned int read_light() {
 _read_light:
 ; .FSTART _read_light
+; 0001 0013 
+; 0001 0014 // reads the value of the light from PORTA.0
+; 0001 0015 unsigned int light_level = read_adc(0b00000000);
+; 0001 0016 return light_level;
 	ST   -Y,R17
 	ST   -Y,R16
 ;	light_level -> R16,R17
 	LDI  R26,LOW(0)
-	RCALL _read_voltage
+	RCALL _read_adc
 	MOVW R16,R30
-	RJMP _0x20A0003
-; .FEND
-_ring_alarm:
-; .FSTART _ring_alarm
-	ST   -Y,R17
-	ST   -Y,R16
-;	i -> R16,R17
-	__GETWRN 16,17,0
-_0x9:
-	__CPWRN 16,17,4
-	BRGE _0xA
-	CBI  0xB,3
-	LDI  R26,LOW(200)
-	LDI  R27,0
-	RCALL _delay_ms
-	SBI  0xB,3
-	LDI  R26,LOW(200)
-	LDI  R27,0
-	RCALL _delay_ms
-	__ADDWRN 16,17,1
-	RJMP _0x9
-_0xA:
-	CBI  0xB,3
-_0x20A0003:
 	LD   R16,Y+
 	LD   R17,Y+
 	RET
+; 0001 0017 }
 ; .FEND
-_laser_spoof_check:
-; .FSTART _laser_spoof_check
-	RCALL __SAVELOCR4
-	MOVW R16,R26
-	__GETWRS 18,19,4
+	#ifndef __SLEEP_DEFINED__
+	#define __SLEEP_DEFINED__
+	.EQU __se_bit=0x01
+	.EQU __sm_mask=0x0E
+	.EQU __sm_powerdown=0x04
+	.EQU __sm_powersave=0x06
+	.EQU __sm_standby=0x0C
+	.EQU __sm_ext_standby=0x0E
+	.EQU __sm_adc_noise_red=0x02
+	.SET power_ctrl_reg=smcr
+	#endif
+;void ring_alarm(){
+; 0002 0003 void ring_alarm(){
+
+	.CSEG
+; 0002 0004 short int i;
+; 0002 0005 
+; 0002 0006 for (i = 0; i < 4; i++) {
+;	i -> R16,R17
+; 0002 0007 PORTD.3 = 0;
+; 0002 0008 delay_ms(200);
+; 0002 0009 PORTD.3 = 1;
+; 0002 000A delay_ms(200);
+; 0002 000B }
+; 0002 000C 
+; 0002 000D PORTD.3 = 0;
+; 0002 000E }
+;char laser_spoof_check(unsigned int env_light, char* counter) {
+; 0002 0010 char laser_spoof_check(unsigned int env_light, char* counter) {
+; 0002 0011 
+; 0002 0012 if (*counter == 60) {
 ;	env_light -> R18,R19
 ;	*counter -> R16,R17
-	LD   R26,X
-	CPI  R26,LOW(0x3C)
-	BRNE _0x11
-	SBIW R28,2
-	LDI  R30,LOW(0)
-	ST   Y,R30
-	STD  Y+1,R30
+; 0002 0013 
+; 0002 0014 unsigned int light_check = 0;
+; 0002 0015 
+; 0002 0016 PORTD.4 = 0;
 ;	light_check -> Y+0
-	__POINTW1FN _0x0,0
-	RCALL SUBOPT_0x0
-	LDI  R24,4
-	RCALL _printf
-	ADIW R28,6
-	RCALL SUBOPT_0x1
-	ST   Y,R30
-	STD  Y+1,R31
-	__POINTW1FN _0x0,23
-	ST   -Y,R31
-	ST   -Y,R30
-	RCALL SUBOPT_0x2
-	LDD  R30,Y+6
-	LDD  R31,Y+6+1
-	CLR  R22
-	CLR  R23
-	RCALL __PUTPARD1
-	LDI  R24,8
-	RCALL _printf
-	ADIW R28,10
-	__POINTW1FN _0x0,59
-	ST   -Y,R31
-	ST   -Y,R30
-	LDD  R30,Y+2
-	LDD  R31,Y+2+1
-	SUB  R30,R18
-	SBC  R31,R19
-	CLR  R22
-	CLR  R23
-	RCALL __PUTPARD1
-	LDI  R24,4
-	RCALL _printf
-	ADIW R28,6
-	LD   R26,Y
-	LDD  R27,Y+1
-	SUB  R26,R18
-	SBC  R27,R19
-	SBIW R26,51
-	BRLT _0x14
+; 0002 0017 delay_ms(100);
+; 0002 0018 
+; 0002 0019 light_check = read_light();
+; 0002 001A 
+; 0002 001B if ((int)(light_check - env_light) > 50) {
+; 0002 001C PORTD.4 = 1;
+; 0002 001D delay_ms(100);
+; 0002 001E *counter = 0;
+; 0002 001F return 1;
+; 0002 0020 }
+; 0002 0021 
+; 0002 0022 
+; 0002 0023 }
+; 0002 0024 
+; 0002 0025 *counter += 1;
+; 0002 0026 return 0;
+; 0002 0027 }
+	#ifndef __SLEEP_DEFINED__
+	#define __SLEEP_DEFINED__
+	.EQU __se_bit=0x01
+	.EQU __sm_mask=0x0E
+	.EQU __sm_powerdown=0x04
+	.EQU __sm_powersave=0x06
+	.EQU __sm_standby=0x0C
+	.EQU __sm_ext_standby=0x0E
+	.EQU __sm_adc_noise_red=0x02
+	.SET power_ctrl_reg=smcr
+	#endif
+;void initialise_mcu() {
+; 0003 0003 void initialise_mcu() {
+
+	.CSEG
+_initialise_mcu:
+; .FSTART _initialise_mcu
+; 0003 0004 
+; 0003 0005 #pragma optsize-
+; 0003 0006 CLKPR=(1<<CLKPCE);
+	LDI  R30,LOW(128)
+	STS  97,R30
+; 0003 0007 CLKPR=(0<<CLKPCE) | (0<<CLKPS3) | (0<<CLKPS2) | (0<<CLKPS1) | (0<<CLKPS0);
+	LDI  R30,LOW(0)
+	STS  97,R30
+; 0003 0008 #ifdef _OPTIMIZE_SIZE_
+; 0003 0009 #pragma optsize+
+; 0003 000A #endif
+; 0003 000B 
+; 0003 000C // Port A initialization
+; 0003 000D // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
+; 0003 000E DDRA=(0<<DDA7) | (0<<DDA6) | (0<<DDA5) | (0<<DDA4) | (0<<DDA3) | (0<<DDA2) | (0<<DDA1) | (0<<DDA0);
+	OUT  0x1,R30
+; 0003 000F // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
+; 0003 0010 PORTA=(0<<PORTA7) | (0<<PORTA6) | (0<<PORTA5) | (0<<PORTA4) | (0<<PORTA3) | (0<<PORTA2) | (0<<PORTA1) | (0<<PORTA0);
+	OUT  0x2,R30
+; 0003 0011 
+; 0003 0012 // Port B initialization
+; 0003 0013 // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=Out
+; 0003 0014 DDRB=(0<<DDB7) | (0<<DDB6) | (0<<DDB5) | (0<<DDB4) | (0<<DDB3) | (0<<DDB2) | (0<<DDB1) | (1<<DDB0);
 	LDI  R30,LOW(1)
-	ADIW R28,2
-	RJMP _0x20A0002
-_0x14:
-	RCALL SUBOPT_0x3
-	MOVW R26,R16
+	OUT  0x4,R30
+; 0003 0015 // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
+; 0003 0016 PORTB=(0<<PORTB7) | (0<<PORTB6) | (0<<PORTB5) | (0<<PORTB4) | (0<<PORTB3) | (0<<PORTB2) | (0<<PORTB1) | (0<<PORTB0);
 	LDI  R30,LOW(0)
-	ST   X,R30
-	ADIW R28,2
-_0x11:
-	MOVW R26,R16
-	LD   R30,X
-	SUBI R30,-LOW(1)
-	ST   X,R30
+	OUT  0x5,R30
+; 0003 0017 
+; 0003 0018 // Port C initialization
+; 0003 0019 // Function: Bit7=In Bit6=In Bit5=In Bit4=In Bit3=In Bit2=In Bit1=In Bit0=In
+; 0003 001A DDRC=(0<<DDC7) | (0<<DDC6) | (0<<DDC5) | (0<<DDC4) | (0<<DDC3) | (0<<DDC2) | (0<<DDC1) | (0<<DDC0);
+	OUT  0x7,R30
+; 0003 001B // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
+; 0003 001C PORTC=(0<<PORTC7) | (0<<PORTC6) | (0<<PORTC5) | (0<<PORTC4) | (0<<PORTC3) | (0<<PORTC2) | (0<<PORTC1) | (0<<PORTC0);
+	OUT  0x8,R30
+; 0003 001D 
+; 0003 001E // Port D initialization
+; 0003 001F // Function: Bit7=In Bit6=In Bit5=In Bit4=Out Bit3=In Bit2=In Bit1=In Bit0=In
+; 0003 0020 DDRD=(0<<DDD7) | (1<<DDD6) | (0<<DDD5) | (1<<DDD4) | (1<<DDD3) | (0<<DDD2) | (0<<DDD1) | (0<<DDD0);
+	LDI  R30,LOW(88)
+	OUT  0xA,R30
+; 0003 0021 // State: Bit7=T Bit6=T Bit5=T Bit4=T Bit3=T Bit2=T Bit1=T Bit0=T
+; 0003 0022 PORTD=(0<<PORTD7) | (0<<PORTD6) | (0<<PORTD5) | (0<<PORTD4) | (0<<PORTD3) | (0<<PORTD2) | (0<<PORTD1) | (0<<PORTD0);
 	LDI  R30,LOW(0)
-_0x20A0002:
-	RCALL __LOADLOCR4
-	ADIW R28,6
+	OUT  0xB,R30
+; 0003 0023 
+; 0003 0024 // Timer/Counter 0 initialization
+; 0003 0025 // Clock source: System Clock
+; 0003 0026 // Clock value: Timer 0 Stopped
+; 0003 0027 // Mode: Normal top=0xFF
+; 0003 0028 // OC0A output: Disconnected
+; 0003 0029 // OC0B output: Disconnected
+; 0003 002A TCCR0A=(0<<COM0A1) | (0<<COM0A0) | (0<<COM0B1) | (0<<COM0B0) | (0<<WGM01) | (0<<WGM00);
+	OUT  0x24,R30
+; 0003 002B TCCR0B=(0<<WGM02) | (0<<CS02) | (0<<CS01) | (0<<CS00);
+	OUT  0x25,R30
+; 0003 002C TCNT0=0x00;
+	OUT  0x26,R30
+; 0003 002D OCR0A=0x00;
+	OUT  0x27,R30
+; 0003 002E OCR0B=0x00;
+	OUT  0x28,R30
+; 0003 002F 
+; 0003 0030 // Timer/Counter 1 initialization
+; 0003 0031 // Clock source: System Clock
+; 0003 0032 // Clock value: Timer1 Stopped
+; 0003 0033 // Mode: Normal top=0xFFFF
+; 0003 0034 // OC1A output: Disconnected
+; 0003 0035 // OC1B output: Disconnected
+; 0003 0036 // Noise Canceler: Off
+; 0003 0037 // Input Capture on Falling Edge
+; 0003 0038 // Timer1 Overflow Interrupt: Off
+; 0003 0039 // Input Capture Interrupt: Off
+; 0003 003A // Compare A Match Interrupt: Off
+; 0003 003B // Compare B Match Interrupt: Off
+; 0003 003C TCCR1A=(0<<COM1A1) | (0<<COM1A0) | (0<<COM1B1) | (0<<COM1B0) | (0<<WGM11) | (0<<WGM10);
+	STS  128,R30
+; 0003 003D TCCR1B=(0<<ICNC1) | (0<<ICES1) | (0<<WGM13) | (0<<WGM12) | (0<<CS12) | (0<<CS11) | (0<<CS10);
+	STS  129,R30
+; 0003 003E TCNT1H=0x00;
+	STS  133,R30
+; 0003 003F TCNT1L=0x00;
+	STS  132,R30
+; 0003 0040 ICR1H=0x00;
+	STS  135,R30
+; 0003 0041 ICR1L=0x00;
+	STS  134,R30
+; 0003 0042 OCR1AH=0x00;
+	STS  137,R30
+; 0003 0043 OCR1AL=0x00;
+	STS  136,R30
+; 0003 0044 OCR1BH=0x00;
+	STS  139,R30
+; 0003 0045 OCR1BL=0x00;
+	STS  138,R30
+; 0003 0046 
+; 0003 0047 // Timer/Counter 2 initialization
+; 0003 0048 // Clock source: System Clock
+; 0003 0049 // Clock value: Timer2 Stopped
+; 0003 004A // Mode: Normal top=0xFF
+; 0003 004B // OC2A output: Disconnected
+; 0003 004C // OC2B output: Disconnected
+; 0003 004D ASSR=(0<<EXCLK) | (0<<AS2);
+	STS  182,R30
+; 0003 004E TCCR2A=(0<<COM2A1) | (0<<COM2A0) | (0<<COM2B1) | (0<<COM2B0) | (0<<WGM21) | (0<<WGM20);
+	STS  176,R30
+; 0003 004F TCCR2B=(0<<WGM22) | (0<<CS22) | (0<<CS21) | (0<<CS20);
+	STS  177,R30
+; 0003 0050 TCNT2=0x00;
+	STS  178,R30
+; 0003 0051 OCR2A=0x00;
+	STS  179,R30
+; 0003 0052 OCR2B=0x00;
+	STS  180,R30
+; 0003 0053 
+; 0003 0054 // Timer/Counter 0 Interrupt(s) initialization
+; 0003 0055 TIMSK0=(0<<OCIE0B) | (0<<OCIE0A) | (0<<TOIE0);
+	STS  110,R30
+; 0003 0056 
+; 0003 0057 // Timer/Counter 1 Interrupt(s) initialization
+; 0003 0058 TIMSK1=(0<<ICIE1) | (0<<OCIE1B) | (0<<OCIE1A) | (0<<TOIE1);
+	STS  111,R30
+; 0003 0059 
+; 0003 005A // Timer/Counter 2 Interrupt(s) initialization
+; 0003 005B TIMSK2=(0<<OCIE2B) | (0<<OCIE2A) | (0<<TOIE2);
+	STS  112,R30
+; 0003 005C 
+; 0003 005D // External Interrupt(s) initialization
+; 0003 005E // INT0: Off
+; 0003 005F // INT1: Off
+; 0003 0060 // INT2: Off
+; 0003 0061 // Interrupt on any change on pins PCINT0-7: Off
+; 0003 0062 // Interrupt on any change on pins PCINT8-15: Off
+; 0003 0063 // Interrupt on any change on pins PCINT16-23: Off
+; 0003 0064 // Interrupt on any change on pins PCINT24-31: Off
+; 0003 0065 EICRA=(0<<ISC21) | (0<<ISC20) | (0<<ISC11) | (0<<ISC10) | (0<<ISC01) | (0<<ISC00);
+	STS  105,R30
+; 0003 0066 EIMSK=(0<<INT2) | (0<<INT1) | (0<<INT0);
+	OUT  0x1D,R30
+; 0003 0067 PCICR=(0<<PCIE3) | (0<<PCIE2) | (0<<PCIE1) | (0<<PCIE0);
+	STS  104,R30
+; 0003 0068 
+; 0003 0069 // USART0 initialization
+; 0003 006A // Communication Parameters: 8 Data, 1 Stop, No Parity
+; 0003 006B // USART0 Receiver: Off
+; 0003 006C // USART0 Transmitter: On
+; 0003 006D // USART0 Mode: Asynchronous
+; 0003 006E // USART0 Baud Rate: 9600
+; 0003 006F UCSR0A=(0<<RXC0) | (0<<TXC0) | (0<<UDRE0) | (0<<FE0) | (0<<DOR0) | (0<<UPE0) | (0<<U2X0) | (0<<MPCM0);
+	STS  192,R30
+; 0003 0070 UCSR0B=(0<<RXCIE0) | (0<<TXCIE0) | (0<<UDRIE0) | (0<<RXEN0) | (1<<TXEN0) | (0<<UCSZ02) | (0<<RXB80) | (0<<TXB80);
+	LDI  R30,LOW(8)
+	STS  193,R30
+; 0003 0071 UCSR0C=(0<<UMSEL01) | (0<<UMSEL00) | (0<<UPM01) | (0<<UPM00) | (0<<USBS0) | (1<<UCSZ01) | (1<<UCSZ00) | (0<<UCPOL0);
+	LDI  R30,LOW(6)
+	STS  194,R30
+; 0003 0072 UBRR0H=0x00;
+	LDI  R30,LOW(0)
+	STS  197,R30
+; 0003 0073 UBRR0L=0x81;
+	LDI  R30,LOW(129)
+	STS  196,R30
+; 0003 0074 
+; 0003 0075 
+; 0003 0076 // USART1 initialization
+; 0003 0077 // USART1 disabled
+; 0003 0078 UCSR1B=(0<<RXCIE1) | (0<<TXCIE1) | (0<<UDRIE1) | (0<<RXEN1) | (0<<TXEN1) | (0<<UCSZ12) | (0<<RXB81) | (0<<TXB81);
+	LDI  R30,LOW(0)
+	STS  201,R30
+; 0003 0079 
+; 0003 007A // Analog Comparator initialization
+; 0003 007B // Analog Comparator: Off
+; 0003 007C // The Analog Comparator's positive input is
+; 0003 007D // connected to the AIN0 pin
+; 0003 007E // The Analog Comparator's negative input is
+; 0003 007F // connected to the AIN1 pin
+; 0003 0080 ACSR=(1<<ACD) | (0<<ACBG) | (0<<ACO) | (0<<ACI) | (0<<ACIE) | (0<<ACIC) | (0<<ACIS1) | (0<<ACIS0);
+	LDI  R30,LOW(128)
+	OUT  0x30,R30
+; 0003 0081 // Digital input buffer on AIN0: On
+; 0003 0082 // Digital input buffer on AIN1: On
+; 0003 0083 DIDR1=(0<<AIN0D) | (0<<AIN1D);
+	LDI  R30,LOW(0)
+	STS  127,R30
+; 0003 0084 
+; 0003 0085 // ADC initialization
+; 0003 0086 // ADC Clock frequency: 625.000 kHz
+; 0003 0087 // ADC Voltage Reference: AREF pin
+; 0003 0088 // ADC Auto Trigger Source: Free Running
+; 0003 0089 // Digital input buffers on ADC0: On, ADC1: On, ADC2: On, ADC3: On
+; 0003 008A // ADC4: On, ADC5: On, ADC6: On, ADC7: On
+; 0003 008B DIDR0=(0<<ADC7D) | (0<<ADC6D) | (0<<ADC5D) | (0<<ADC4D) | (0<<ADC3D) | (0<<ADC2D) | (0<<ADC1D) | (0<<ADC0D);
+	STS  126,R30
+; 0003 008C ADMUX=ADC_VREF_TYPE;
+	LDI  R30,LOW(64)
+	STS  124,R30
+; 0003 008D ADCSRA=(1<<ADEN) | (0<<ADSC) | (1<<ADATE) | (0<<ADIF) | (0<<ADIE) | (1<<ADPS2) | (0<<ADPS1) | (1<<ADPS0);
+	LDI  R30,LOW(165)
+	STS  122,R30
+; 0003 008E ADCSRB=(0<<ADTS2) | (0<<ADTS1) | (0<<ADTS0);
+	LDI  R30,LOW(0)
+	STS  123,R30
+; 0003 008F 
+; 0003 0090 // SPI initialization
+; 0003 0091 // SPI disabled
+; 0003 0092 SPCR=(0<<SPIE) | (0<<SPE) | (0<<DORD) | (0<<MSTR) | (0<<CPOL) | (0<<CPHA) | (0<<SPR1) | (0<<SPR0);
+	OUT  0x2C,R30
+; 0003 0093 
+; 0003 0094 // TWI initialization
+; 0003 0095 // TWI disabled
+; 0003 0096 TWCR=(0<<TWEA) | (0<<TWSTA) | (0<<TWSTO) | (0<<TWEN) | (0<<TWIE);
+	STS  188,R30
+; 0003 0097 
+; 0003 0098 }
 	RET
-; .FEND
-;void main(void) {
-; 0000 000A void main(void) {
-_main:
-; .FSTART _main
-; 0000 000B 
-; 0000 000C unsigned int light = 0;
-; 0000 000D unsigned int env_light = 0;
-; 0000 000E char counter = 0;
-; 0000 000F int random_check = rand() % 300;
-; 0000 0010 
-; 0000 0011 initialise_mcu();
-	SBIW R28,2
-;	light -> R16,R17
-;	env_light -> R18,R19
-;	counter -> R21
-;	random_check -> Y+0
-	__GETWRN 16,17,0
-	__GETWRN 18,19,0
-	LDI  R21,0
-	RCALL SUBOPT_0x4
-	RCALL _initialise_mcu
-; 0000 0012 env_light = read_light();
-	RCALL _read_light
-	RCALL SUBOPT_0x5
-; 0000 0013 
-; 0000 0014 delay_ms(50);
-; 0000 0015 PORTD.4 = 1;
-	SBI  0xB,4
-; 0000 0016 
-; 0000 0017 while (1) {
-_0x19:
-; 0000 0018 
-; 0000 0019 light = read_light();
-	RCALL _read_light
-	MOVW R16,R30
-; 0000 001A delay_ms(50);
-	LDI  R26,LOW(50)
-	LDI  R27,0
-	RCALL _delay_ms
-; 0000 001B 
-; 0000 001C /* Wait for empty transmit buffer */
-; 0000 001D printf("sensor light: %u, random_check: %d, env_light: %u \n", light, random_check, env_light);
-	__POINTW1FN _0x0,85
-	RCALL SUBOPT_0x0
-	LDD  R30,Y+6
-	LDD  R31,Y+6+1
-	__CWD1
-	RCALL __PUTPARD1
-	RCALL SUBOPT_0x2
-	LDI  R24,12
-	RCALL _printf
-	ADIW R28,14
-; 0000 001E 
-; 0000 001F if (light <= env_light + 10) {
-	MOVW R30,R18
-	ADIW R30,10
-	CP   R30,R16
-	CPC  R31,R17
-	BRLO _0x1C
-; 0000 0020 ring_alarm();
-	RCALL _ring_alarm
-; 0000 0021 }
-; 0000 0022 
-; 0000 0023 if(laser_spoof_check(env_light, &counter)) {
-_0x1C:
-	ST   -Y,R19
-	ST   -Y,R18
-	IN   R26,SPL
-	IN   R27,SPH
-	PUSH R21
-	RCALL _laser_spoof_check
-	POP  R21
-	CPI  R30,0
-	BREQ _0x1D
-; 0000 0024 ring_alarm();
-	RCALL _ring_alarm
-; 0000 0025 }
-; 0000 0026 
-; 0000 0027 
-; 0000 0028 if (random_check == 0) {
-_0x1D:
-	LD   R30,Y
-	LDD  R31,Y+1
-	SBIW R30,0
-	BRNE _0x1E
-; 0000 0029 
-; 0000 002A printf("RANDOM CHECK! \n");
-	__POINTW1FN _0x0,137
-	ST   -Y,R31
-	ST   -Y,R30
-	LDI  R24,0
-	RCALL _printf
-	ADIW R28,2
-; 0000 002B random_check = rand() % 300;
-	RCALL SUBOPT_0x4
-; 0000 002C PORTD.4 = 0;
-	RCALL SUBOPT_0x1
-; 0000 002D delay_ms(50);
-; 0000 002E env_light = read_light();
-	RCALL SUBOPT_0x5
-; 0000 002F delay_ms(50);
-; 0000 0030 PORTD.4 = 1;
-	RCALL SUBOPT_0x3
-; 0000 0031 delay_ms(100);
-; 0000 0032 }
-; 0000 0033 
-; 0000 0034 random_check -= 1;
-_0x1E:
-	LD   R30,Y
-	LDD  R31,Y+1
-	SBIW R30,1
-	ST   Y,R30
-	STD  Y+1,R31
-; 0000 0035 heartbeat_mcu();
-	RCALL _heartbeat_mcu
-; 0000 0036 
-; 0000 0037 }
-	RJMP _0x19
-; 0000 0038 }
-_0x23:
-	RJMP _0x23
 ; .FEND
 	#ifndef __SLEEP_DEFINED__
 	#define __SLEEP_DEFINED__
@@ -2003,7 +2168,7 @@ _0x200001C:
 	LDI  R17,LOW(1)
 	RJMP _0x2000024
 _0x2000023:
-	RCALL SUBOPT_0x6
+	RCALL SUBOPT_0x1
 _0x2000024:
 	RJMP _0x2000021
 _0x2000022:
@@ -2011,7 +2176,7 @@ _0x2000022:
 	BRNE _0x2000025
 	CPI  R18,37
 	BRNE _0x2000026
-	RCALL SUBOPT_0x6
+	RCALL SUBOPT_0x1
 	RJMP _0x20000D2
 _0x2000026:
 	LDI  R17,LOW(2)
@@ -2068,26 +2233,26 @@ _0x200002F:
 	MOV  R30,R18
 	CPI  R30,LOW(0x63)
 	BRNE _0x2000035
-	RCALL SUBOPT_0x7
+	RCALL SUBOPT_0x2
 	LDD  R30,Y+16
 	LDD  R31,Y+16+1
 	LDD  R26,Z+4
 	ST   -Y,R26
-	RCALL SUBOPT_0x8
+	RCALL SUBOPT_0x3
 	RJMP _0x2000036
 _0x2000035:
 	CPI  R30,LOW(0x73)
 	BRNE _0x2000038
-	RCALL SUBOPT_0x7
-	RCALL SUBOPT_0x9
+	RCALL SUBOPT_0x2
+	RCALL SUBOPT_0x4
 	RCALL _strlen
 	MOV  R17,R30
 	RJMP _0x2000039
 _0x2000038:
 	CPI  R30,LOW(0x70)
 	BRNE _0x200003B
-	RCALL SUBOPT_0x7
-	RCALL SUBOPT_0x9
+	RCALL SUBOPT_0x2
+	RCALL SUBOPT_0x4
 	RCALL _strlenf
 	MOV  R17,R30
 	ORI  R16,LOW(8)
@@ -2132,7 +2297,7 @@ _0x2000046:
 _0x2000043:
 	SBRS R16,2
 	RJMP _0x2000048
-	RCALL SUBOPT_0x7
+	RCALL SUBOPT_0x2
 	LDD  R26,Y+16
 	LDD  R27,Y+16+1
 	ADIW R26,4
@@ -2157,7 +2322,7 @@ _0x200004A:
 _0x200004B:
 	RJMP _0x200004C
 _0x2000048:
-	RCALL SUBOPT_0x7
+	RCALL SUBOPT_0x2
 	LDD  R26,Y+16
 	LDD  R27,Y+16+1
 	ADIW R26,4
@@ -2186,7 +2351,7 @@ _0x2000053:
 _0x2000051:
 	LDI  R18,LOW(32)
 _0x2000054:
-	RCALL SUBOPT_0x6
+	RCALL SUBOPT_0x1
 	SUBI R21,LOW(1)
 	RJMP _0x200004E
 _0x2000050:
@@ -2212,7 +2377,7 @@ _0x2000059:
 	STD  Y+6,R26
 	STD  Y+6+1,R27
 _0x200005A:
-	RCALL SUBOPT_0x6
+	RCALL SUBOPT_0x1
 	CPI  R21,0
 	BREQ _0x200005B
 	SUBI R21,LOW(1)
@@ -2291,7 +2456,7 @@ _0x20000D3:
 	RJMP _0x2000070
 	ANDI R16,LOW(251)
 	ST   -Y,R20
-	RCALL SUBOPT_0x8
+	RCALL SUBOPT_0x3
 	CPI  R21,0
 	BREQ _0x2000071
 	SUBI R21,LOW(1)
@@ -2299,7 +2464,7 @@ _0x2000071:
 _0x2000070:
 _0x200006F:
 _0x2000067:
-	RCALL SUBOPT_0x6
+	RCALL SUBOPT_0x1
 	CPI  R21,0
 	BREQ _0x2000072
 	SUBI R21,LOW(1)
@@ -2321,7 +2486,7 @@ _0x2000074:
 	SUBI R21,LOW(1)
 	LDI  R30,LOW(32)
 	ST   -Y,R30
-	RCALL SUBOPT_0x8
+	RCALL SUBOPT_0x3
 	RJMP _0x2000074
 _0x2000076:
 _0x2000073:
@@ -2450,57 +2615,16 @@ __seed_G101:
 	.CSEG
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:3 WORDS
 SUBOPT_0x0:
-	ST   -Y,R31
-	ST   -Y,R30
-	MOVW R30,R16
-	CLR  R22
-	CLR  R23
-	RCALL __PUTPARD1
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:2 WORDS
-SUBOPT_0x1:
-	CBI  0xB,4
-	LDI  R26,LOW(50)
-	LDI  R27,0
-	RCALL _delay_ms
-	RJMP _read_light
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x2:
-	MOVW R30,R18
-	CLR  R22
-	CLR  R23
-	RCALL __PUTPARD1
-	RET
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x3:
-	SBI  0xB,4
-	LDI  R26,LOW(100)
-	LDI  R27,0
-	RJMP _delay_ms
-
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:4 WORDS
-SUBOPT_0x4:
 	RCALL _rand
 	MOVW R26,R30
-	LDI  R30,LOW(300)
-	LDI  R31,HIGH(300)
+	LDI  R30,LOW(70)
+	LDI  R31,HIGH(70)
 	RCALL __MODW21
 	ST   Y,R30
-	STD  Y+1,R31
 	RET
 
-;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:1 WORDS
-SUBOPT_0x5:
-	MOVW R18,R30
-	LDI  R26,LOW(50)
-	LDI  R27,0
-	RJMP _delay_ms
-
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 5 TIMES, CODE SIZE REDUCTION:18 WORDS
-SUBOPT_0x6:
+SUBOPT_0x1:
 	ST   -Y,R18
 	LDD  R26,Y+13
 	LDD  R27,Y+13+1
@@ -2510,7 +2634,7 @@ SUBOPT_0x6:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 5 TIMES, CODE SIZE REDUCTION:14 WORDS
-SUBOPT_0x7:
+SUBOPT_0x2:
 	LDD  R30,Y+16
 	LDD  R31,Y+16+1
 	SBIW R30,4
@@ -2519,7 +2643,7 @@ SUBOPT_0x7:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 3 TIMES, CODE SIZE REDUCTION:6 WORDS
-SUBOPT_0x8:
+SUBOPT_0x3:
 	LDD  R26,Y+13
 	LDD  R27,Y+13+1
 	LDD  R30,Y+15
@@ -2528,7 +2652,7 @@ SUBOPT_0x8:
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 2 TIMES, CODE SIZE REDUCTION:6 WORDS
-SUBOPT_0x9:
+SUBOPT_0x4:
 	LDD  R26,Y+16
 	LDD  R27,Y+16+1
 	ADIW R26,4

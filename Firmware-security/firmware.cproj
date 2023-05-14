@@ -41,6 +41,15 @@
     <Compile Include="firmware.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="adc_mcu.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="alarm_mcu.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="initialise_mcu.c">
+      <SubType>compile</SubType>
+    </Compile>
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\vs\\CV.targets" />
 </Project>

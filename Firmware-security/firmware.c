@@ -1,56 +1,81 @@
-// I/O Registers definitions
-#include <mega164a.h>
-#include <delay.h>
-#include <stdio.h>
-#include <stdlib.h>
+// DEBUG VERSION
+
 #include "initialise_mcu.h"
-#include "adc_mcu.h"
-#include "alarm_mcu.h"
+
 
 void main(void) {
     
+    // initialize variable for light on sensor        
     unsigned int light = 0;
-    unsigned int env_light = 0;
-    char counter = 0;
-    int random_check = rand() % 300;
-        
-    initialise_mcu();    
-    env_light = read_light();
     
-    delay_ms(50);
+    // initialize variable for the light in the environment value
+    unsigned int env_light = 0;
+    
+    // initialize counters for random + spoof checks + first run of the loop
+    // char spoofCheck_counter = 0;
+    char firstRun = 0;
+    char alarmRing = 0;
+    char randomCheck_counter = rand() % 70;
+    
+    
+    // initialize ports on mcu and the adc    
+    initialise_mcu();
+    
+    // reads the light from the sensor without laser shining on it   
+    env_light = read_light();
+    delay_ms(100);
+    
+    // turn on the laser
     PORTD.4 = 1;
     
-    while (1) {    
-                               
-        light = read_light();
-        delay_ms(50);
-            
-        /* Wait for empty transmit buffer */
-        printf("sensor light: %u, random_check: %d, env_light: %u \n", light, random_check, env_light);
     
-        if (light <= env_light + 10) {
-            ring_alarm();
-        }
-              
-        if(laser_spoof_check(env_light, &counter)) {
-            ring_alarm();
-        }
-                
-                    
-        if (random_check == 0) {
+    while (1) {
+        
+        // if it is the first loop, delay the read of adc by 100ms
+        if (firstRun == 0) {
+            firstRun = 1;
+            delay_ms(100);        
+        }    
+        
+        // reads the light from the sensor with laser shining on it                       
+        light = read_light();
             
-            printf("RANDOM CHECK! \n");
-            random_check = rand() % 300;            
-            PORTD.4 = 0;
-            delay_ms(50);            
+        printf("sensor light: %u, random_check: %d, env_light: %u \n", light, randomCheck_counter, env_light);
+    
+        // checks if the laser is shining on the sensor
+        if (light <= env_light) {
+            //ring_alarm();
+            if (alarmRing == 0) {
+                PORTD.6 = 1;
+                PORTB.0 = 1;
+                alarmRing = 1;
+            }
+        }
+        
+        // checks if the laser was spoofed by another light source      
+        /* if(laser_spoof_check(env_light, &spoofCheck_counter)) {
+            //ring_alarm();
+            if (alarmRing == 0) {
+                PORTD.6 = 1;
+                PORTB.0 = 1;
+                alarmRing = 1;
+            }
+        }
+        */
+                
+        // checks randomly within maximum 30s if the light in the environment has changed             
+        if (randomCheck_counter == 0) {            
+            randomCheck_counter = rand() % 70;            
+            PORTD.4 = 0;            
+            if (PORTD.4 != 0) 
+                PORTD.4 = 0;                            
+            delay_ms(100);
             env_light = read_light();
-            delay_ms(50);
             PORTD.4 = 1;
             delay_ms(100);
         }
         
-        random_check -= 1;  
-        heartbeat_mcu();             
+        randomCheck_counter -= 1;           
               
     }
 }
