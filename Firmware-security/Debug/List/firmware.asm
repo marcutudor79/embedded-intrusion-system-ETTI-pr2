@@ -1,5 +1,5 @@
 
-;CodeVisionAVR C Compiler V3.51 Evaluation
+;CodeVisionAVR C Compiler V3.51 
 ;(C) Copyright 1998-2023 Pavel Haiduc, HP InfoTech S.R.L.
 ;http://www.hpinfotech.ro
 
@@ -1589,14 +1589,13 @@ _main:
 ; 0000 000C unsigned int env_light = 0;
 ; 0000 000D 
 ; 0000 000E // initialize counters for random + spoof checks + first run of the loop
-; 0000 000F // char spoofCheck_counter = 0;
-; 0000 0010 char firstRun = 0;
-; 0000 0011 char alarmRing = 0;
-; 0000 0012 char randomCheck_counter = rand() % 70;
+; 0000 000F char firstRun = 0;
+; 0000 0010 char alarmRing = 0;
+; 0000 0011 char randomCheck_counter = rand() % 70;
+; 0000 0012 
 ; 0000 0013 
-; 0000 0014 
-; 0000 0015 // initialize ports on mcu and the adc
-; 0000 0016 initialise_mcu();
+; 0000 0014 // initialize ports on mcu and the adc
+; 0000 0015 initialise_mcu();
 	SBIW R28,1
 ;	light -> R16,R17
 ;	env_light -> R18,R19
@@ -1609,24 +1608,25 @@ _main:
 	LDI  R20,0
 	RCALL SUBOPT_0x0
 	RCALL _initialise_mcu
-; 0000 0017 
-; 0000 0018 // reads the light from the sensor without laser shining on it
-; 0000 0019 env_light = read_light();
+; 0000 0016 
+; 0000 0017 // reads the light from the sensor without laser shining on it
+; 0000 0018 env_light = read_light();
 	RCALL _read_light
 	MOVW R18,R30
-; 0000 001A delay_ms(100);
+; 0000 0019 delay_ms(100);
 	LDI  R26,LOW(100)
 	LDI  R27,0
 	RCALL _delay_ms
-; 0000 001B 
-; 0000 001C // turn on the laser
-; 0000 001D PORTD.4 = 1;
+; 0000 001A 
+; 0000 001B // turn on the laser
+; 0000 001C PORTD.4 = 1;
 	SBI  0xB,4
+; 0000 001D 
 ; 0000 001E 
-; 0000 001F 
-; 0000 0020 while (1) {
+; 0000 001F while (1) {
 _0x5:
-; 0000 0021 
+; 0000 0020 
+; 0000 0021 // if it is the first loop, delay the read of adc by 100ms
 ; 0000 0022 if (firstRun == 0) {
 	CPI  R21,0
 	BRNE _0x8
@@ -1644,7 +1644,8 @@ _0x8:
 	RCALL _read_light
 	MOVW R16,R30
 ; 0000 0029 
-; 0000 002A printf("sensor light: %u, random_check: %d, env_light: %u \n", light, randomCheck_counter, env_light);
+; 0000 002A // debug printf
+; 0000 002B printf("sensor light: %u, random_check: %d, env_light: %u \n", light, randomCheck_counter, env_light);
 	__POINTW1FN _0x0,0
 	ST   -Y,R31
 	ST   -Y,R30
@@ -1664,74 +1665,63 @@ _0x8:
 	LDI  R24,12
 	RCALL _printf
 	ADIW R28,14
-; 0000 002B 
-; 0000 002C // checks if the laser is shining on the sensor
-; 0000 002D if (light <= env_light) {
+; 0000 002C 
+; 0000 002D // checks if the laser is shining on the sensor
+; 0000 002E if (light <= env_light) {
 	__CPWRR 18,19,16,17
 	BRLO _0x9
-; 0000 002E //ring_alarm();
-; 0000 002F if (alarmRing == 0) {
+; 0000 002F //ring_alarm();
+; 0000 0030 if (alarmRing == 0) {
 	CPI  R20,0
 	BRNE _0xA
-; 0000 0030 PORTD.6 = 1;
+; 0000 0031 PORTD.6 = 1;
 	SBI  0xB,6
-; 0000 0031 PORTB.0 = 1;
+; 0000 0032 PORTB.0 = 1;
 	SBI  0x5,0
-; 0000 0032 alarmRing = 1;
+; 0000 0033 alarmRing = 1;
 	LDI  R20,LOW(1)
-; 0000 0033 }
 ; 0000 0034 }
+; 0000 0035 }
 _0xA:
-; 0000 0035 
-; 0000 0036 // checks if the laser was spoofed by another light source
-; 0000 0037 /* if(laser_spoof_check(env_light, &spoofCheck_counter)) {
-; 0000 0038 //ring_alarm();
-; 0000 0039 if (alarmRing == 0) {
-; 0000 003A PORTD.6 = 1;
-; 0000 003B PORTB.0 = 1;
-; 0000 003C alarmRing = 1;
-; 0000 003D }
-; 0000 003E }
-; 0000 003F */
-; 0000 0040 
-; 0000 0041 // checks randomly within maximum 30s if the light in the environment has changed
-; 0000 0042 if (randomCheck_counter == 0) {
+; 0000 0036 
+; 0000 0037 // checks randomly within maximum 30s if the light in the environment has changed
+; 0000 0038 if (randomCheck_counter == 0) {
 _0x9:
 	LD   R30,Y
 	CPI  R30,0
 	BRNE _0xF
-; 0000 0043 randomCheck_counter = rand() % 70;
+; 0000 0039 randomCheck_counter = rand() % 70;
 	RCALL SUBOPT_0x0
-; 0000 0044 PORTD.4 = 0;
+; 0000 003A PORTD.4 = 0;
 	CBI  0xB,4
-; 0000 0045 if (PORTD.4 != 0)
+; 0000 003B if (PORTD.4 != 0)
 	SBIC 0xB,4
-; 0000 0046 PORTD.4 = 0;
+; 0000 003C PORTD.4 = 0;
 	CBI  0xB,4
-; 0000 0047 delay_ms(100);
+; 0000 003D delay_ms(100);
 	LDI  R26,LOW(100)
 	LDI  R27,0
 	RCALL _delay_ms
-; 0000 0048 env_light = read_light();
+; 0000 003E env_light = read_light();
 	RCALL _read_light
 	MOVW R18,R30
-; 0000 0049 PORTD.4 = 1;
+; 0000 003F PORTD.4 = 1;
 	SBI  0xB,4
-; 0000 004A delay_ms(100);
+; 0000 0040 delay_ms(100);
 	LDI  R26,LOW(100)
 	LDI  R27,0
 	RCALL _delay_ms
-; 0000 004B }
-; 0000 004C 
-; 0000 004D randomCheck_counter -= 1;
+; 0000 0041 }
+; 0000 0042 
+; 0000 0043 randomCheck_counter -= 1;
 _0xF:
 	LD   R30,Y
 	SUBI R30,LOW(1)
 	ST   Y,R30
-; 0000 004E 
-; 0000 004F }
+; 0000 0044 
+; 0000 0045 }
 	RJMP _0x5
-; 0000 0050 }
+; 0000 0046 }
 _0x17:
 	RJMP _0x17
 ; .FEND
@@ -1746,51 +1736,58 @@ _0x17:
 	.EQU __sm_adc_noise_red=0x02
 	.SET power_ctrl_reg=smcr
 	#endif
-;unsigned int read_adc(unsigned char adc_input)
-; 0001 0005 {
+;unsigned int read_adc(unsigned char adc_input) {
+; 0001 0004 unsigned int read_adc(unsigned char adc_input) {
 
 	.CSEG
 _read_adc:
 ; .FSTART _read_adc
-; 0001 0006 ADMUX=adc_input | ADC_VREF_TYPE;
+; 0001 0005 
+; 0001 0006 // OR between adc input and type of adc reference 01 - 2.56V internal reference
+; 0001 0007 ADMUX=adc_input | 0b01000000;
 	ST   -Y,R17
 	MOV  R17,R26
 ;	adc_input -> R17
 	MOV  R30,R17
 	ORI  R30,0x40
 	STS  124,R30
-; 0001 0007 // Delay needed for the stabilization of the ADC input voltage
-; 0001 0008 delay_us(10);
+; 0001 0008 
+; 0001 0009 // Delay needed for the stabilization of the ADC input voltage
+; 0001 000A delay_us(10);
 	__DELAY_USB 67
-; 0001 0009 // Start the AD conversion
-; 0001 000A ADCSRA|=(1<<ADSC);
+; 0001 000B 
+; 0001 000C // Start the AD conversion
+; 0001 000D ADCSRA|=(1<<ADSC);
 	LDS  R30,122
 	ORI  R30,0x40
 	STS  122,R30
-; 0001 000B // Wait for the AD conversion to complete
-; 0001 000C while ((ADCSRA & (1<<ADIF))==0);
+; 0001 000E 
+; 0001 000F // Wait for the AD conversion to complete
+; 0001 0010 while ((ADCSRA & (1<<ADIF))==0);
 _0x20003:
 	LDS  R30,122
 	ANDI R30,LOW(0x10)
 	BREQ _0x20003
-; 0001 000D ADCSRA|=(1<<ADIF);
+; 0001 0011 
+; 0001 0012 ADCSRA|=(1<<ADIF);
 	LDS  R30,122
 	ORI  R30,0x10
 	STS  122,R30
-; 0001 000E return ADCW;
+; 0001 0013 
+; 0001 0014 return ADCW;
 	LDS  R30,120
 	LDS  R31,120+1
 	JMP  _0x20A0001
-; 0001 000F }
+; 0001 0015 }
 ; .FEND
 ;unsigned int read_light() {
-; 0001 0012 unsigned int read_light() {
+; 0001 0018 unsigned int read_light() {
 _read_light:
 ; .FSTART _read_light
-; 0001 0013 
-; 0001 0014 // reads the value of the light from PORTA.0
-; 0001 0015 unsigned int light_level = read_adc(0b00000000);
-; 0001 0016 return light_level;
+; 0001 0019 
+; 0001 001A // reads the value of the light from PORTA.0
+; 0001 001B unsigned int light_level = read_adc(0b00000000);
+; 0001 001C return light_level;
 	ST   -Y,R17
 	ST   -Y,R16
 ;	light_level -> R16,R17
@@ -1800,7 +1797,7 @@ _read_light:
 	LD   R16,Y+
 	LD   R17,Y+
 	RET
-; 0001 0017 }
+; 0001 001D }
 ; .FEND
 	#ifndef __SLEEP_DEFINED__
 	#define __SLEEP_DEFINED__
@@ -1829,34 +1826,6 @@ _read_light:
 ; 0002 000C 
 ; 0002 000D PORTD.3 = 0;
 ; 0002 000E }
-;char laser_spoof_check(unsigned int env_light, char* counter) {
-; 0002 0010 char laser_spoof_check(unsigned int env_light, char* counter) {
-; 0002 0011 
-; 0002 0012 if (*counter == 60) {
-;	env_light -> R18,R19
-;	*counter -> R16,R17
-; 0002 0013 
-; 0002 0014 unsigned int light_check = 0;
-; 0002 0015 
-; 0002 0016 PORTD.4 = 0;
-;	light_check -> Y+0
-; 0002 0017 delay_ms(100);
-; 0002 0018 
-; 0002 0019 light_check = read_light();
-; 0002 001A 
-; 0002 001B if ((int)(light_check - env_light) > 50) {
-; 0002 001C PORTD.4 = 1;
-; 0002 001D delay_ms(100);
-; 0002 001E *counter = 0;
-; 0002 001F return 1;
-; 0002 0020 }
-; 0002 0021 
-; 0002 0022 
-; 0002 0023 }
-; 0002 0024 
-; 0002 0025 *counter += 1;
-; 0002 0026 return 0;
-; 0002 0027 }
 	#ifndef __SLEEP_DEFINED__
 	#define __SLEEP_DEFINED__
 	.EQU __se_bit=0x01
@@ -2069,7 +2038,7 @@ _initialise_mcu:
 ; 0003 008A // ADC4: On, ADC5: On, ADC6: On, ADC7: On
 ; 0003 008B DIDR0=(0<<ADC7D) | (0<<ADC6D) | (0<<ADC5D) | (0<<ADC4D) | (0<<ADC3D) | (0<<ADC2D) | (0<<ADC1D) | (0<<ADC0D);
 	STS  126,R30
-; 0003 008C ADMUX=ADC_VREF_TYPE;
+; 0003 008C ADMUX=0b01000000;
 	LDI  R30,LOW(64)
 	STS  124,R30
 ; 0003 008D ADCSRA=(1<<ADEN) | (0<<ADSC) | (1<<ADATE) | (0<<ADIF) | (0<<ADIE) | (1<<ADPS2) | (0<<ADPS1) | (1<<ADPS0);

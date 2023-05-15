@@ -131,15 +131,15 @@ void initialise_mcu() {
     DIDR1=(0<<AIN0D) | (0<<AIN1D);
     
     // ADC initialization
-// ADC Clock frequency: 625.000 kHz
-// ADC Voltage Reference: AREF pin
-// ADC Auto Trigger Source: Free Running
-// Digital input buffers on ADC0: On, ADC1: On, ADC2: On, ADC3: On
-// ADC4: On, ADC5: On, ADC6: On, ADC7: On
-DIDR0=(0<<ADC7D) | (0<<ADC6D) | (0<<ADC5D) | (0<<ADC4D) | (0<<ADC3D) | (0<<ADC2D) | (0<<ADC1D) | (0<<ADC0D);
-ADMUX=ADC_VREF_TYPE;
-ADCSRA=(1<<ADEN) | (0<<ADSC) | (1<<ADATE) | (0<<ADIF) | (0<<ADIE) | (1<<ADPS2) | (0<<ADPS1) | (1<<ADPS0);
-ADCSRB=(0<<ADTS2) | (0<<ADTS1) | (0<<ADTS0);
+    // ADC Clock frequency: 625.000 kHz
+    // ADC Voltage Reference: AREF pin
+    // ADC Auto Trigger Source: Free Running
+    // Digital input buffers on ADC0: On, ADC1: On, ADC2: On, ADC3: On
+    // ADC4: On, ADC5: On, ADC6: On, ADC7: On
+    DIDR0=(0<<ADC7D) | (0<<ADC6D) | (0<<ADC5D) | (0<<ADC4D) | (0<<ADC3D) | (0<<ADC2D) | (0<<ADC1D) | (0<<ADC0D);
+    ADMUX=0b01000000;
+    ADCSRA=(1<<ADEN) | (0<<ADSC) | (1<<ADATE) | (0<<ADIF) | (0<<ADIE) | (1<<ADPS2) | (0<<ADPS1) | (1<<ADPS0);
+    ADCSRB=(0<<ADTS2) | (0<<ADTS1) | (0<<ADTS0);
     
     // SPI initialization
     // SPI disabled

@@ -12,7 +12,6 @@ void main(void) {
     unsigned int env_light = 0;
     
     // initialize counters for random + spoof checks + first run of the loop
-    // char spoofCheck_counter = 0;
     char firstRun = 0;
     char alarmRing = 0;
     char randomCheck_counter = rand() % 70;
@@ -39,7 +38,8 @@ void main(void) {
         
         // reads the light from the sensor with laser shining on it                       
         light = read_light();
-            
+        
+        // debug printf    
         printf("sensor light: %u, random_check: %d, env_light: %u \n", light, randomCheck_counter, env_light);
     
         // checks if the laser is shining on the sensor
@@ -51,17 +51,6 @@ void main(void) {
                 alarmRing = 1;
             }
         }
-        
-        // checks if the laser was spoofed by another light source      
-        /* if(laser_spoof_check(env_light, &spoofCheck_counter)) {
-            //ring_alarm();
-            if (alarmRing == 0) {
-                PORTD.6 = 1;
-                PORTB.0 = 1;
-                alarmRing = 1;
-            }
-        }
-        */
                 
         // checks randomly within maximum 30s if the light in the environment has changed             
         if (randomCheck_counter == 0) {            

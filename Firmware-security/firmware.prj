@@ -142,8 +142,8 @@ DisplayCodeSizeError=1
 UseBootAppXmega=0
 RebuildAll=0
 LinkageInformationPresent=1
-COFFileTimeStamp=1454279727
-Build=134
+COFFileTimeStamp=1454355254
+Build=139
 GlobalVarAddr=516
 EEPROMVarAddr=0
 [DefinedSymbolsDebug]
@@ -255,7 +255,7 @@ UseBootAppXmega=0
 RebuildAll=1
 LinkageInformationPresent=0
 COFFileTimeStamp=-1
-Build=134
+Build=139
 IncludePath0=D:\cvavreval\inc
 IncludePath1=
 IncludePath2=
@@ -564,10 +564,10 @@ L13=Enhanced function parameters passing: Mode 2
 L14=Automatic register allocation: Yes
 L15=Smart register allocation: Yes
 L16=
-L17=Build: 134
-L18=20058 line(s) compiled
+L17=Build: 139
+L18=20018 line(s) compiled
 L19=No errors
-L20=2 warning(s)
+L20=No warnings
 L21=
 L22=Bit variables size: 0 byte(s)
 L23=
@@ -592,7 +592,7 @@ Lines=12
 L1=AVRASM: AVR macro assembler 2.1.30 (build 592 Nov  7 2008 12:38:17)
 L2=Copyright (C) 1995-2008 ATMEL Corporation
 L3=
-L4=D:\1code\ATMELMega_C_Laser_security_system\Firmware-security\Debug\List\firmware.asm(2804): No EEPROM data, deleting D:\1code\ATMELMega_C_Laser_security_system\Firmware-security\Debug\Exe\firmware.eep
+L4=D:\1code\ATMELMega_C_Laser_security_system\Firmware-security\Debug\List\firmware.asm(2773): No EEPROM data, deleting D:\1code\ATMELMega_C_Laser_security_system\Firmware-security\Debug\Exe\firmware.eep
 L5=
 L6=ATmega164A memory use summary [bytes]:
 L7=Segment   Begin    End      Code   Data   Used    Size   Use%
@@ -602,8 +602,8 @@ L10=[.dseg] 0x000100 0x000204      0      4      4    1024   0.4%
 L11=[.eseg] 0x000000 0x000000      0      0      0     512   0.0%
 L12=
 [Bookmarks3]
-TimeStamp=1454273960
-Row=6
+TimeStamp=1454279752
+Row=0
 Column=0
 ScrollPosX=0
 ScrollPosY=0
@@ -820,8 +820,6 @@ BK8=-1
 BK9=-1
 [FoldedCode6]
 Blocks=0
-[FoldedCode3]
-Blocks=0
 [Bookmarks15]
 TimeStamp=1454274123
 Row=151
@@ -860,13 +858,15 @@ BK6=-1
 BK7=-1
 BK8=-1
 BK9=-1
-[FoldedCode16]
-Blocks=0
 [FoldedCode8]
 Blocks=0
 [FoldedCode5]
 Blocks=0
 [FoldedCode14]
+Blocks=0
+[FoldedCode3]
+Blocks=0
+[FoldedCode16]
 Blocks=0
 [HeadersList]
 Files=4
