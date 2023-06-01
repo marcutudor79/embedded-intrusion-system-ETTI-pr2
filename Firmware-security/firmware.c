@@ -13,7 +13,6 @@ void main(void) {
     
     // initialize counters for random + spoof checks + first run of the loop
     char firstRun = 0;
-    char alarmRing = 0;
     char randomCheck_counter = rand() % 70;
     
     
@@ -43,12 +42,13 @@ void main(void) {
         printf("sensor light: %u, random_check: %d, env_light: %u \n", light, randomCheck_counter, env_light);
     
         // checks if the laser is shining on the sensor
-        if (light <= env_light) {
-            //ring_alarm();
-            if (alarmRing == 0) {
-                PORTD.6 = 1;
-                PORTB.0 = 1;
-                alarmRing = 1;
+        if (light <= env_light) {  
+            // Turn on red led
+            PORTD.6 = 1;          
+            // Turn off blue led
+            PORTB.0 = 1;
+            while(1){    
+            ring_alarm();
             }
         }
                 

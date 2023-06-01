@@ -3,7 +3,7 @@
 
 unsigned int read_adc(unsigned char adc_input) {
     
-    // OR between adc input and type of adc reference 01 - 2.56V internal reference
+    // OR between adc input and type of adc reference 01 - AVcc reference
     ADMUX=adc_input | 0b01000000;
     
     // Delay needed for the stabilization of the ADC input voltage

@@ -1590,62 +1590,58 @@ _main:
 ; 0000 000D 
 ; 0000 000E // initialize counters for random + spoof checks + first run of the loop
 ; 0000 000F char firstRun = 0;
-; 0000 0010 char alarmRing = 0;
-; 0000 0011 char randomCheck_counter = rand() % 70;
+; 0000 0010 char randomCheck_counter = rand() % 70;
+; 0000 0011 
 ; 0000 0012 
-; 0000 0013 
-; 0000 0014 // initialize ports on mcu and the adc
-; 0000 0015 initialise_mcu();
-	SBIW R28,1
+; 0000 0013 // initialize ports on mcu and the adc
+; 0000 0014 initialise_mcu();
 ;	light -> R16,R17
 ;	env_light -> R18,R19
 ;	firstRun -> R21
-;	alarmRing -> R20
-;	randomCheck_counter -> Y+0
+;	randomCheck_counter -> R20
 	__GETWRN 16,17,0
 	__GETWRN 18,19,0
 	LDI  R21,0
-	LDI  R20,0
 	RCALL SUBOPT_0x0
 	RCALL _initialise_mcu
-; 0000 0016 
-; 0000 0017 // reads the light from the sensor without laser shining on it
-; 0000 0018 env_light = read_light();
+; 0000 0015 
+; 0000 0016 // reads the light from the sensor without laser shining on it
+; 0000 0017 env_light = read_light();
 	RCALL _read_light
 	MOVW R18,R30
-; 0000 0019 delay_ms(100);
+; 0000 0018 delay_ms(100);
 	LDI  R26,LOW(100)
 	LDI  R27,0
 	RCALL _delay_ms
-; 0000 001A 
-; 0000 001B // turn on the laser
-; 0000 001C PORTD.4 = 1;
+; 0000 0019 
+; 0000 001A // turn on the laser
+; 0000 001B PORTD.4 = 1;
 	SBI  0xB,4
+; 0000 001C 
 ; 0000 001D 
-; 0000 001E 
-; 0000 001F while (1) {
+; 0000 001E while (1) {
 _0x5:
-; 0000 0020 
-; 0000 0021 // if it is the first loop, delay the read of adc by 100ms
-; 0000 0022 if (firstRun == 0) {
+; 0000 001F 
+; 0000 0020 // if it is the first loop, delay the read of adc by 100ms
+; 0000 0021 if (firstRun == 0) {
 	CPI  R21,0
 	BRNE _0x8
-; 0000 0023 firstRun = 1;
+; 0000 0022 firstRun = 1;
 	LDI  R21,LOW(1)
-; 0000 0024 delay_ms(100);
+; 0000 0023 delay_ms(100);
 	LDI  R26,LOW(100)
 	LDI  R27,0
 	RCALL _delay_ms
-; 0000 0025 }
-; 0000 0026 
-; 0000 0027 // reads the light from the sensor with laser shining on it
-; 0000 0028 light = read_light();
+; 0000 0024 }
+; 0000 0025 
+; 0000 0026 // reads the light from the sensor with laser shining on it
+; 0000 0027 light = read_light();
 _0x8:
 	RCALL _read_light
 	MOVW R16,R30
-; 0000 0029 
-; 0000 002A // debug printf
-; 0000 002B printf("sensor light: %u, random_check: %d, env_light: %u \n", light, randomCheck_counter, env_light);
+; 0000 0028 
+; 0000 0029 // debug printf
+; 0000 002A printf("sensor light: %u, random_check: %d, env_light: %u \n", light, randomCheck_counter, env_light);
 	__POINTW1FN _0x0,0
 	ST   -Y,R31
 	ST   -Y,R30
@@ -1653,7 +1649,7 @@ _0x8:
 	CLR  R22
 	CLR  R23
 	RCALL __PUTPARD1
-	LDD  R30,Y+6
+	MOV  R30,R20
 	CLR  R31
 	CLR  R22
 	CLR  R23
@@ -1665,31 +1661,30 @@ _0x8:
 	LDI  R24,12
 	RCALL _printf
 	ADIW R28,14
-; 0000 002C 
-; 0000 002D // checks if the laser is shining on the sensor
-; 0000 002E if (light <= env_light) {
+; 0000 002B 
+; 0000 002C // checks if the laser is shining on the sensor
+; 0000 002D if (light <= env_light) {
 	__CPWRR 18,19,16,17
 	BRLO _0x9
-; 0000 002F //ring_alarm();
-; 0000 0030 if (alarmRing == 0) {
-	CPI  R20,0
-	BRNE _0xA
-; 0000 0031 PORTD.6 = 1;
+; 0000 002E // Turn on red led
+; 0000 002F PORTD.6 = 1;
 	SBI  0xB,6
-; 0000 0032 PORTB.0 = 1;
+; 0000 0030 // Turn off blue led
+; 0000 0031 PORTB.0 = 1;
 	SBI  0x5,0
-; 0000 0033 alarmRing = 1;
-	LDI  R20,LOW(1)
+; 0000 0032 while(1){
+_0xE:
+; 0000 0033 ring_alarm();
+	RCALL _ring_alarm
 ; 0000 0034 }
+	RJMP _0xE
 ; 0000 0035 }
-_0xA:
 ; 0000 0036 
 ; 0000 0037 // checks randomly within maximum 30s if the light in the environment has changed
 ; 0000 0038 if (randomCheck_counter == 0) {
 _0x9:
-	LD   R30,Y
-	CPI  R30,0
-	BRNE _0xF
+	CPI  R20,0
+	BRNE _0x11
 ; 0000 0039 randomCheck_counter = rand() % 70;
 	RCALL SUBOPT_0x0
 ; 0000 003A PORTD.4 = 0;
@@ -1714,16 +1709,14 @@ _0x9:
 ; 0000 0041 }
 ; 0000 0042 
 ; 0000 0043 randomCheck_counter -= 1;
-_0xF:
-	LD   R30,Y
-	SUBI R30,LOW(1)
-	ST   Y,R30
+_0x11:
+	SUBI R20,LOW(1)
 ; 0000 0044 
 ; 0000 0045 }
 	RJMP _0x5
 ; 0000 0046 }
-_0x17:
-	RJMP _0x17
+_0x19:
+	RJMP _0x19
 ; .FEND
 	#ifndef __SLEEP_DEFINED__
 	#define __SLEEP_DEFINED__
@@ -1743,7 +1736,7 @@ _0x17:
 _read_adc:
 ; .FSTART _read_adc
 ; 0001 0005 
-; 0001 0006 // OR between adc input and type of adc reference 01 - 2.56V internal reference
+; 0001 0006 // OR between adc input and type of adc reference 01 - AVcc reference
 ; 0001 0007 ADMUX=adc_input | 0b01000000;
 	ST   -Y,R17
 	MOV  R17,R26
@@ -1794,9 +1787,7 @@ _read_light:
 	LDI  R26,LOW(0)
 	RCALL _read_adc
 	MOVW R16,R30
-	LD   R16,Y+
-	LD   R17,Y+
-	RET
+	RJMP _0x20A0002
 ; 0001 001D }
 ; .FEND
 	#ifndef __SLEEP_DEFINED__
@@ -1814,18 +1805,43 @@ _read_light:
 ; 0002 0003 void ring_alarm(){
 
 	.CSEG
+_ring_alarm:
+; .FSTART _ring_alarm
 ; 0002 0004 short int i;
 ; 0002 0005 
 ; 0002 0006 for (i = 0; i < 4; i++) {
+	ST   -Y,R17
+	ST   -Y,R16
 ;	i -> R16,R17
+	__GETWRN 16,17,0
+_0x40004:
+	__CPWRN 16,17,4
+	BRGE _0x40005
 ; 0002 0007 PORTD.3 = 0;
+	CBI  0xB,3
 ; 0002 0008 delay_ms(200);
+	LDI  R26,LOW(200)
+	LDI  R27,0
+	RCALL _delay_ms
 ; 0002 0009 PORTD.3 = 1;
+	SBI  0xB,3
 ; 0002 000A delay_ms(200);
+	LDI  R26,LOW(200)
+	LDI  R27,0
+	RCALL _delay_ms
 ; 0002 000B }
+	__ADDWRN 16,17,1
+	RJMP _0x40004
+_0x40005:
 ; 0002 000C 
 ; 0002 000D PORTD.3 = 0;
+	CBI  0xB,3
 ; 0002 000E }
+_0x20A0002:
+	LD   R16,Y+
+	LD   R17,Y+
+	RET
+; .FEND
 	#ifndef __SLEEP_DEFINED__
 	#define __SLEEP_DEFINED__
 	.EQU __se_bit=0x01
@@ -2589,7 +2605,7 @@ SUBOPT_0x0:
 	LDI  R30,LOW(70)
 	LDI  R31,HIGH(70)
 	RCALL __MODW21
-	ST   Y,R30
+	MOV  R20,R30
 	RET
 
 ;OPTIMIZER ADDED SUBROUTINE, CALLED 5 TIMES, CODE SIZE REDUCTION:18 WORDS

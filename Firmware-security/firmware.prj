@@ -7,9 +7,9 @@ A=
 C=
 D=07-May-2023
 Files=4
-OpenedFiles=8
+OpenedFiles=9
 OF1=firmware.c
-ActiveTab=6
+ActiveTab=7
 DebugOutputListFilesDirectory=Debug\List
 DebugOutputObjectFilesDirectory=Debug
 DebugOutputExecutableFilesDirectory=Debug\Exe
@@ -20,26 +20,28 @@ OutputExecutableFilesDirectory=Release\Exe
 OutputLinkerFilesDirectory=Release\Link
 AllowDisplayFunctionCallTree=1
 CleanUp=2
-TimeStamp1=1454355249
+TimeStamp1=1455208640
 OF2=adc_mcu.h
-TimeStamp2=1454355092
-OF3=alarm_mcu.h
-TimeStamp3=1454355214
-OF4=D:\cvavreval\inc\delay.h
-TimeStamp4=711006688
+TimeStamp2=1455208640
+OF3=initialise_mcu.h
+TimeStamp3=1455208640
+OF4=alarm_mcu.h
+TimeStamp4=1455208673
 TimeStamp0=1454090358
-OF5=adc_mcu.c
-TimeStamp5=1454355192
-OF6=initialise_mcu.c
-TimeStamp6=1454355086
+OF5=untitled.c
+TimeStamp5=1455208640
+OF6=D:\cvavreval\inc\delay.h
+TimeStamp6=711006688
 F1=firmware.c
 F2=adc_mcu.c
 F3=alarm_mcu.c
 F4=initialise_mcu.c
-OF7=alarm_mcu.c
-TimeStamp7=1454355220
-OF8=initialise_mcu.h
-TimeStamp8=1454279752
+OF7=adc_mcu.c
+TimeStamp7=1455208641
+OF8=alarm_mcu.c
+TimeStamp8=1455208640
+OF9=initialise_mcu.c
+TimeStamp9=1455208640
 [CompilerDebug]
 Chip=ATmega164A
 CPUClock=20000000
@@ -146,8 +148,8 @@ DisplayCodeSizeError=1
 UseBootAppXmega=0
 RebuildAll=0
 LinkageInformationPresent=1
-COFFileTimeStamp=1454355254
-Build=139
+COFFileTimeStamp=1455245611
+Build=46
 GlobalVarAddr=516
 EEPROMVarAddr=0
 [DefinedSymbolsDebug]
@@ -259,7 +261,7 @@ UseBootAppXmega=0
 RebuildAll=1
 LinkageInformationPresent=0
 COFFileTimeStamp=-1
-Build=139
+Build=46
 IncludePath0=D:\cvavreval\inc
 IncludePath1=
 IncludePath2=
@@ -568,8 +570,8 @@ L13=Enhanced function parameters passing: Mode 2
 L14=Automatic register allocation: Yes
 L15=Smart register allocation: Yes
 L16=
-L17=Build: 139
-L18=20018 line(s) compiled
+L17=Build: 46
+L18=18363 line(s) compiled
 L19=No errors
 L20=No warnings
 L21=
@@ -577,7 +579,7 @@ L22=Bit variables size: 0 byte(s)
 L23=
 L24=Data Stack area: 0x100 to 0x1FF
 L25=Data Stack size: 256 byte(s)
-L26=Estimated Data Stack usage: 33 byte(s)
+L26=Estimated Data Stack usage: 32 byte(s)
 L27=
 L28=RAM Global variables area: 0x200 to 0x203
 L29=RAM Global variables size: 4 byte(s)
@@ -589,24 +591,24 @@ L34=Heap size: 0 byte(s)
 L35=
 Lines=38
 L36=EEPROM usage: 0 byte(s), 0.0% of EEPROM
-L37=Program size: 916 words (1832 bytes), 11.2% of FLASH
-L38=47 words (94 bytes), 4.9% reduced by Code Compression
+L37=Program size: 931 words (1862 bytes), 11.4% of FLASH
+L38=47 words (94 bytes), 4.8% reduced by Code Compression
 [BuildInfoAssembler]
 Lines=12
 L1=AVRASM: AVR macro assembler 2.1.30 (build 592 Nov  7 2008 12:38:17)
 L2=Copyright (C) 1995-2008 ATMEL Corporation
 L3=
-L4=D:\1code\ATMELMega_C_Laser_security_system\Firmware-security\Debug\List\firmware.asm(2773): No EEPROM data, deleting D:\1code\ATMELMega_C_Laser_security_system\Firmware-security\Debug\Exe\firmware.eep
+L4=D:\1code\ATMELMega_C_Laser_security_system\Firmware-security\Debug\List\firmware.asm(2789): No EEPROM data, deleting D:\1code\ATMELMega_C_Laser_security_system\Firmware-security\Debug\Exe\firmware.eep
 L5=
 L6=ATmega164A memory use summary [bytes]:
 L7=Segment   Begin    End      Code   Data   Used    Size   Use%
 L8=---------------------------------------------------------------
-L9=[.cseg] 0x000000 0x000728   1742     90   1832   16384  11.2%
+L9=[.cseg] 0x000000 0x000746   1772     90   1862   16384  11.4%
 L10=[.dseg] 0x000100 0x000204      0      4      4    1024   0.4%
 L11=[.eseg] 0x000000 0x000000      0      0      0     512   0.0%
 L12=
 [Bookmarks3]
-TimeStamp=1454279752
+TimeStamp=1455208640
 Row=0
 Column=0
 ScrollPosX=0
@@ -644,12 +646,12 @@ Row=0
 Column=0
 ScrollPosX=0
 ScrollPosY=0
-TimeStamp=1455197833
+TimeStamp=1455245945
 [FoldedCode2]
 Blocks=0
 [Bookmarks5]
-TimeStamp=1454355214
-Row=12
+TimeStamp=1455208673
+Row=3
 Column=0
 ScrollPosX=0
 ScrollPosY=0
@@ -664,8 +666,8 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks6]
-TimeStamp=1454355092
-Row=2
+TimeStamp=1455208640
+Row=0
 Column=0
 ScrollPosX=0
 ScrollPosY=0
@@ -680,11 +682,11 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks7]
-TimeStamp=1454355249
-Row=56
-Column=12
+TimeStamp=1455208640
+Row=0
+Column=0
 ScrollPosX=0
-ScrollPosY=38
+ScrollPosY=0
 BK0=-1
 BK1=-1
 BK2=-1
@@ -712,11 +714,11 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks9]
-TimeStamp=1454216871
+TimeStamp=1455208640
 Row=0
 Column=0
 ScrollPosX=0
-ScrollPosY=139
+ScrollPosY=0
 BK0=-1
 BK1=-1
 BK2=-1
@@ -727,8 +729,6 @@ BK6=-1
 BK7=-1
 BK8=-1
 BK9=-1
-[FoldedCode9]
-Blocks=0
 [USBLibrary]
 UseSuspend=0
 CDCVirtualSerialPort=0
@@ -791,9 +791,9 @@ BK9=-1
 [FoldedCode12]
 Blocks=0
 [Bookmarks13]
-TimeStamp=1454355192
-Row=5
-Column=83
+TimeStamp=1455208641
+Row=9
+Column=63
 ScrollPosX=0
 ScrollPosY=0
 BK0=-1
@@ -807,8 +807,8 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks14]
-TimeStamp=1454355220
-Row=14
+TimeStamp=1455208640
+Row=0
 Column=0
 ScrollPosX=0
 ScrollPosY=0
@@ -823,11 +823,11 @@ BK7=-1
 BK8=-1
 BK9=-1
 [Bookmarks15]
-TimeStamp=1454355086
-Row=139
-Column=20
+TimeStamp=1455208640
+Row=0
+Column=0
 ScrollPosX=0
-ScrollPosY=111
+ScrollPosY=0
 BK0=-1
 BK1=-1
 BK2=-1
@@ -856,6 +856,14 @@ BK8=-1
 BK9=-1
 [FoldedCode16]
 Blocks=0
+[FoldedCode9]
+Blocks=0
+[FoldedCode5]
+Blocks=0
+[FoldedCode3]
+Blocks=0
+[FoldedCode6]
+Blocks=0
 [HeadersList]
 Files=4
 F1=D:\1code\ATMELMega_C_Laser_security_system\Firmware-security\firmware.c
@@ -881,15 +889,11 @@ F2=D:\cvavreval\inc\mega164a.h
 F3=D:\cvavreval\inc\mega324_bits.h
 F4=D:\cvavreval\inc\delay.h
 [Header3]
-Files=8
+Files=4
 F1=alarm_mcu.h
 F2=D:\cvavreval\inc\mega164a.h
 F3=D:\cvavreval\inc\mega324_bits.h
-F4=D:\cvavreval\inc\stdio.h
-F5=D:\cvavreval\inc\io.h
-F6=D:\cvavreval\inc\stdarg.h
-F7=D:\cvavreval\inc\delay.h
-F8=adc_mcu.h
+F4=D:\cvavreval\inc\delay.h
 [Header4]
 Files=10
 F1=initialise_mcu.h
@@ -909,12 +913,4 @@ Blocks=0
 [FoldedCode14]
 Blocks=0
 [FoldedCode15]
-Blocks=0
-[FoldedCode3]
-Blocks=0
-[FoldedCode8]
-Blocks=0
-[FoldedCode5]
-Blocks=0
-[FoldedCode6]
-Blocks=0
+Blocks=0 

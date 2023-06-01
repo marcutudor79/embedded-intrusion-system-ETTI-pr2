@@ -1,5 +1,3 @@
-VERSION:3 SOURCE_TIMESTAMP:56AFB30E
+VERSION:3 SOURCE_TIMESTAMP:56BCB8E1
 NODE:I LEVEL:0 LINE:1 "D:\cvavreval\inc\mega164a.h"
-NODE:I LEVEL:0 LINE:2 "D:\cvavreval\inc\stdio.h"
-NODE:I LEVEL:0 LINE:3 "D:\cvavreval\inc\delay.h"
-NODE:I LEVEL:0 LINE:4 "D:\1code\ATMELMega_C_Laser_security_system\Firmware-security\adc_mcu.h"
+NODE:I LEVEL:0 LINE:2 "D:\cvavreval\inc\delay.h"
