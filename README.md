@@ -20,9 +20,9 @@ you are not physically there of course :).
 4. If the light shined upon the photoresistor > ambiental light -> goes back to the 1st step
 
 ## How to use the project
- To compile the project you need to download CVAVR from [here](https://hpinfotech.ro/cvavr-download.html) 
- To flash the microcontroller you will need AVRBuster from [here](http://ham.elcom.pub.ro/proiect2/files/pcloader.zip)
- Please be sure to have a bootloader flashed into to the AVR microcontroller
+- To compile the project you need to download CVAVR from [here](https://hpinfotech.ro/cvavr-download.html).
+- To flash the microcontroller you will need AVRBuster from [here](http://ham.elcom.pub.ro/proiect2/files/pcloader.zip)
+! Please be sure to have a bootloader flashed into to the AVR microcontroller !
 
 ## License 
 Apache-2.0 license
