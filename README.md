@@ -18,11 +18,11 @@ you are not physically there of course :).
 2. The mcu measures the voltage drop on the sensing resistor
 3. If the light shined upon the photoresistor <= than ambiental light -> triggers an alarm
 4. If the light shined upon the photoresistor > ambiental light -> goes back to the 1st step
-   '''
-   #include "initialise_mcu.h"
+
+'''
 
 
-void main(void) {
+      void main(void) {
     
     // initialize variable for light on sensor        
     unsigned int light = 0;
@@ -86,7 +86,7 @@ void main(void) {
         randomCheck_counter -= 1;           
               
     }
-}
+      }
    '''
 
 ## How to use the project
