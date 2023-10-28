@@ -18,29 +18,11 @@ you are not physically there of course :).
 2. The mcu measures the voltage drop on the sensing resistor
 3. If the light shined upon the photoresistor <= than ambiental light -> triggers an alarm
 4. If the light shined upon the photoresistor > ambiental light -> goes back to the 1st step
-
-'''
-
-
-      void main(void) {
+```
+#include "initialise_mcu.h"
+void main(void) {
     
-    // initialize variable for light on sensor        
-    unsigned int light = 0;
-    
-    // initialize variable for the light in the environment value
-    unsigned int env_light = 0;
-    
-    // initialize counters for random + spoof checks + first run of the loop
-    char firstRun = 0;
-    char randomCheck_counter = rand() % 70;
-    
-    
-    // initialize ports on mcu and the adc    
-    initialise_mcu();
-    
-    // reads the light from the sensor without laser shining on it   
-    env_light = read_light();
-    delay_ms(100);
+    /* initialize stuff */
     
     // turn on the laser
     PORTD.4 = 1;
@@ -86,8 +68,8 @@ you are not physically there of course :).
         randomCheck_counter -= 1;           
               
     }
-      }
-   '''
+}
+```
 
 ## How to use the project
 - To compile the project you need to download CVAVR from [here](https://hpinfotech.ro/cvavr-download.html).
