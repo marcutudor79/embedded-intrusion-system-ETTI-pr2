@@ -9,9 +9,8 @@ you are not physically there of course :).
 
 ## What you will find here
 * Docs - contains most of the documentation for the project
-* Firmware-security - contains the code project 
-* Firmare-test - contains a blinky like project
-* PCB - contains a KiCAD electrical scheme of the project
+* Firmware - contains the source and interface files of the project
+* Schematic - contains a KiCAD electrical schematic of the project
 
 ## What it does
 1. The photoresistor has laser diode shining light on it
@@ -72,9 +71,9 @@ void main(void) {
 ```
 
 ## How to use the project
-- To compile the project you need to download CVAVR from [here](https://hpinfotech.ro/cvavr-download.html).
+- To compile the project you need to download CVAVR from [here](https://hpinfotech.ro/cvavr-download.html)
 - To flash the microcontroller you will need AVRBuster from [here](http://ham.elcom.pub.ro/proiect2/files/pcloader.zip)
 - ! Please be sure to have a bootloader flashed into the AVR microcontroller !
 
 ## License 
-Apache-2.0 license
+GPL-3.0 license
