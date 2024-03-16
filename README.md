@@ -11,6 +11,7 @@ you are not physically there of course :).
 * Docs - contains most of the documentation for the project
 * Firmware - contains the source and interface files of the project
 * Schematic - contains a KiCAD electrical schematic of the project
+* Security-system-presentation - a pdf presentation of the project
 
 ## What it does
 1. The photoresistor has laser diode shining light on it
